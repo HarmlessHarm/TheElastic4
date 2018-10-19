@@ -1,6 +1,7 @@
 wget http://maartenmarx.nl/teaching/zoekmachines/Data/goeievraag.zip
 unzip goeievraag.zip
-cd goeievraag
+mv goeievraag data
+cd data
 unzip '*.zip'
 rm *.zip
 cd ..
