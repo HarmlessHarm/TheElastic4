@@ -1,13 +1,35 @@
 # TheElastic4
 Elastic Search assignment for the zoekmachines course at University of Amsterdam
 
+#### Authors
+| Name  | Stud. Nr.  |
+|---|---|
+| Flip van Wijk |   |
+| Harm Manders  | 10677186  |
+| Kjeld Oostra  |   |
+| Sander Hansen |   |
 
-## Obtaining data set
-run `./get_data.sh` to download and unzip the data set
+#### Assignment
+Make an elasticsearch powered search engine on one of multiple data sets.
+Full assignment on [maartenmarx.nl](http://nbviewer.jupyter.org/url/maartenmarx.nl/teaching/zoekmachines/Assignments/ASSIGNMENTS/AssignmentWeek8.ipynb).   
+The data set chosen was the [goeievragen.nl]('goeievragen.nl') data set. A set of 400K questions and 1.4M answers from a dutch site.   
+We have a [wiki]() where all the features of the search enine are described in detail.
 
-## Set up
-1. Python 3.6.4+
-2. Elasticsearch 6.2+ and Kibana 6.2+
+
+## Installation
+```
+git clone https://github.com/HarmlessHarm/TheElastic4.git
+```
+#### Obtaining data set
+Download the data set from [maartenmarx.nl](http://maartenmarx.nl/teaching/zoekmachines/Data/goeievraag.zip) made easy with one simple script!   
+It will download the data set and unzip it and structure it in directories.
+```
+./get_data.sh
+```
+
+#### Installing develop environment
+1. Install Python 3.6.4+
+2. Install Elasticsearch 6.2+ and Kibana 6.2+
 - For OS X, you can use [Homebrew](https://brew.sh/):
 ```
 brew update
@@ -37,6 +59,8 @@ pip install -r requirements
 pip install -e ./
 ```
 
-### Tutorials:
+## Usage
+
+## Tutorials:
 To get a grip for elasticsearch I'd recommend following some tutorials
 - PyCon2018 ElasticSearch [video](https://www.youtube.com/watch?v=6_P_h2bDwYs), [repo](https://github.com/julieqiu/pycon-2018-pyelasticsearch)
