@@ -81,13 +81,17 @@ def preprocess_questions():
 	tm40 = 4175
 	with open('../data/questions.csv') as file:
 		all_lines = file.read(tm40).replace('\n', ' ')
-		# print(all_lines)
-		rId = '([0-9]+)'
-		rDate = '([0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2})'
-		r1 = '{}\,\"{}\"\,{}\,{}\,'.format(rId, rDate, rId, rId)
-		r2 = r1 + '(.*?)' + '(?=' + r1 + ')'
-		result = re.findall(r1, all_lines)
-		pprint.pprint((len(result), result))
+		
+		rId = '[0-9]+'
+		rDate = '[0-9]{4}\-[0-9]{2}\-[0-9]{2}'
+		rTime = '[0-9]{2}\:[0-9]{2}\:[0-9]{2}'
+		r1 = '({})\,\"({})\s({})\"\,({})\,({})\,'.format(rId, rDate, rTime, rId, rId)
+		r2 = '{}\,\"{}\s{}\"\,{}\,{}\,'.format(rId, rDate, rTime, rId, rId)
+		r3 = r1 + '(.*?)' +  r2
+		result = re.findall(r3, all_lines)
+		for res in result:
+			print(res)
+		# pprint.pprint((len(result), result))
 
 
 # get_questions()
