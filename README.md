@@ -51,7 +51,7 @@ source venv/bin/activate
 
 4. Install the necessary pyhton requirements
 ```
-pip install -r requirements
+pip install -r requirements.txt
 ```
 
 5. Set up the app module
@@ -63,4 +63,4 @@ pip install -e ./
 
 ## Tutorials:
 To get a grip for elasticsearch I'd recommend following some tutorials
-- PyCon2018 ElasticSearch [video](https://www.youtube.com/watch?v=6_P_h2bDwYs), [repo](https://github.com/julieqiu/pycon-2018-pyelasticsearch)
+- PyCon2018 ElasticSearch [video](https://www.youtube.com/watch?v=6_P_h2bDwYs), [repo](https://github.com/julieqiu/pycon-2018-pyelasticsearch), [completed repo](https://github.com/HarmlessHarm/elastic_tut)
