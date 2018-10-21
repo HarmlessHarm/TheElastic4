@@ -7,7 +7,7 @@ Elastic Search assignment for the zoekmachines course at University of Amsterdam
 | Flip van Wijk |   |
 | Harm Manders  | 10677186  |
 | Kjeld Oostra  |   |
-| Sander Hansen |   |
+| Sander Hansen | 10995080  |
 
 #### Assignment
 Make an elasticsearch powered search engine on one of multiple data sets.
