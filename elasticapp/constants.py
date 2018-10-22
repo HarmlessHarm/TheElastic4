@@ -1,0 +1,8 @@
+Q_DOC_T = 'question'
+Q_INDEX = 'questions_index'
+A_DOC_T = 'answer'
+A_INDEX = 'answers_index'
+U_DOC_T = 'user'
+U_INDEX = 'users_index'
+C_DOC_T = 'category'
+C_INDEX = 'categories_index'
