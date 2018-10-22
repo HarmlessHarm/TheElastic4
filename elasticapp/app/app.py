@@ -14,5 +14,14 @@ def index():
 	]
 
 	num_results = 9
-	searched_questions = [(t, search(t, num_results)) for t in search_terms]
-	return render_template('index.html', searched_questions=searched_questions)
+	results = [(t, search(t, num_results)) for t in search_terms]
+	return render_template('index.html', results=results)
+
+
+@app.route('/search', methods=['GET','POST'])
+def search_question():
+
+	query = request.args.get('search')
+	num_results = 50
+	results = [(query, search(query, num_results))]
+	return render_template('index.html', results=results,search_term=query)

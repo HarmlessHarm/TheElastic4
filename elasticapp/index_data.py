@@ -14,7 +14,7 @@ def main():
 			'settings':{},
 		})
 
-	helpers.bulk(es, questions_to_index(all_questions()))
+	helpers.bulk(es, questions_to_index(all_questions(False)))
 
 def questions_to_index(questions):
 	# Generator function that yields data objects
