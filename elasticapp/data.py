@@ -1,6 +1,7 @@
 import csv, os, textwrap, re
 
 _all_questions = None
+_all_answers = None
 
 
 
@@ -56,45 +57,70 @@ class AnswerData(object):
 			""").format(self.answerId, self.date, self.userId, self.questionId, 
 									self.answer, self.thumbsDown, self.thumbsUp, self.isBestAnswer)
 
-def get_questions():
+def all_questions(test=True):
+	"""
+	Returns a list with all questions parsed from ../data/questions.csv
+	"""
+	global _all_questions
 
-	parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-	file_path = os.path.join(parent_dir,'data/q1000.csv')
-	
-	with open(file_path) as file:
-		all_lines = file.read().replace('\n', ' ')
+	if _all_questions is None:
+		_all_questions = []
+		file_name = 'data/questions.csv'
+		if test: file_name = 'data/q1000.csv'
+
+		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		file_path = os.path.join(parent_dir, file_name)
 		
-		rId = r'[0-9]+'
-		rDate = r'[0-9]{4}\-[0-9]{2}\-[0-9]{2}'
-		rTime = r'[0-9]{2}\:[0-9]{2}\:[0-9]{2}'
-		r = r'({}\,\"{}\s{}\"\,{}\,{})\,'.format(rId, rDate, rTime, rId, rId)
-		results = re.split(r, all_lines)
+		with open(file_path) as file:
+			all_lines = file.read().replace('\n', ' ')
+			
+			rId = r'[0-9]+'
+			rDate = r'[0-9]{4}\-[0-9]{2}\-[0-9]{2}'
+			rTime = r'[0-9]{2}\:[0-9]{2}\:[0-9]{2}'
+			r = r'({}\,\"{}\s{}\"\,{}\,{})\,'.format(rId, rDate, rTime, rId, rId)
+			results = re.split(r, all_lines)
 
-		for info, text in zip(*[iter(results[1:])]*2):
+			count = 0
+			for info, text in zip(*[iter(results[1:])]*2):
 
-			rT = r'\"(.*?)\"'
-			rN = r'\\N'
-			data = info.split(',') + list(re.findall(rT+r','+rT+r'|'+rN, text)[0])
-			q_data = QuestionData(*data)
+				rT = r'\"(.*?)\"'
+				rN = r'\\N'
+				data = info.split(',') + list(re.findall(rT+r','+rT+r'|'+rN, text)[0])
+				q_data = QuestionData(*data)
+				_all_questions.append(q_data)
+				count += 1
+			print("Loaded {} questions".format(count))
 
-			print(q_data.question)
+def all_answers(test=True):
+	"""
+	Returns a list with all questions parsed from ../data/questions.csv
+	"""
+	global _all_answers
 
+	if _all_answers is None:
+		_all_answers = []
+		file_name = 'data/answers.csv'
+		if test: file_name = 'data/a1000.csv'
 
-def parse_string(ugly_str):
-	# print(ugly_str)
-	import string
-	# translate_table = str.maketrans(dict.fromkeys(['\\']))
-	# print(translate_table)
+		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		file_path = os.path.join(parent_dir, file_name)
+		
+		with open(file_path) as file:
+			all_lines = file.read().replace('\n', ' ')
+			
+			rN = r'([0-9]+)'
+			rDate = r'([0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2})'
+			rT = r'(.*?)'
+			r = r'{}\,\"{}\"\,{}\,{}\,{}\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
+			results = re.findall(r, all_lines)
 
-	new_str = ugly_str.strip('\"')
-	new_str = new_str.replace('\\\"','\"')
-	new_str = new_str.replace('\\\\','\\')
-	r = re.findall('\\{2}', ugly_str)
-	if len(r) > 0:
-		print(ugly_str.find(''))
-		print("{}\n{}\n{}\n\n".format(ugly_str, new_str, r))
+			count = 0
+			for result in results:
+				a_data = AnswerData(*result)
+				_all_answers.append(a_data)
+				count += 1
 
-	return ugly_str
+			print("Loaded {} answers".format(count))
 
-
-get_questions()
+all_questions(True)
+all_answers(True)
