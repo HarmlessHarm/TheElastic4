@@ -2,6 +2,8 @@ import os, textwrap, re
 
 _all_questions = None
 _all_answers = None
+_all_users = None
+_all_categories = None
 
 class QuestionData(object):
 	"""
@@ -79,7 +81,7 @@ class UserData(object):
 		self.expertise = expertise
 		self.bestAnswers = bestAnswers
 
-	def __str_(self):
+	def __str__(self):
 		return textwrap.dedent("""\
 			userId : {}
 			regDate : {}
@@ -119,7 +121,9 @@ def all_questions(test=True):
 			q_data = QuestionData(*data)
 			_all_questions.append(q_data)
 			count += 1
+
 		print("Loaded {} questions".format(count))
+		return _all_questions
 
 def all_answers(test=True):
 	"""
@@ -141,7 +145,7 @@ def all_answers(test=True):
 		rN = r'([0-9]+)'
 		rDate = r'([0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2})'
 		rT = r'(.*?)'
-		r = r'{}\,\"{}\"\,{}\,{}\,{}\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
+		r = r'{}\,\"{}\"\,{}\,{}\,\"{}\"\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
 		results = re.findall(r, all_lines)
 
 		count = 0
@@ -150,4 +154,39 @@ def all_answers(test=True):
 			_all_answers.append(a_data)
 			count += 1
 
-			print("Loaded {} answers".format(count))
+		print("Loaded {} answers".format(count))
+		return _all_answers
+
+
+def all_users():
+	"""
+	Returns a list with all answers parsed from ../data/answers.csv
+	"""
+	global _all_users
+
+	if _all_users is None:
+		_all_users = []
+		file_name = 'data/users.csv'
+
+		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		file_path = os.path.join(parent_dir, file_name)
+		
+		with open(file_path) as file:
+			all_lines = file.read().replace('\n', ' ')
+			
+		rN = r'([0-9]+)'
+		rDate = r'([0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2})'
+		rT = r'(.*?)'
+		r = r'{}\,\"{}\"\,{}\,{}'.format(rN, rDate, rT, rN)
+		results = re.findall(r, all_lines)
+
+		count = 0
+		for result in results:
+			u_data = UserData(*result)
+			_all_users.append(u_data)
+			count += 1
+
+		print("Loaded {} users".format(count))
+		return _all_users
+
+
