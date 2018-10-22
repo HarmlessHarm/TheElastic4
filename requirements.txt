@@ -1,9 +1,11 @@
 Click==7.0
+-e git+git@github.com:HarmlessHarm/TheElastic4.git@399448008ec09b090e863af0ee32eb8de87253a9#egg=elasticapp
 elasticsearch==6.3.1
 Flask==1.0.2
 ItsDangerous==1.0.0
 Jinja2==2.10
 MarkupSafe==1.0
+numpy==1.15.2
 pkg-resources==0.0.0
 urllib3==1.24
 Werkzeug==0.14.1
