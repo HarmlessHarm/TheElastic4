@@ -60,6 +60,19 @@ pip install -e ./
 ```
 
 ## Usage
+1. Activate your virtual environment
+```
+source venv/bin/activate
+```
+2. Import all the data into elasticsearch server
+```
+python elasticapp/index_data.py
+```
+3. Start up server
+```
+python elasticapp/run.py
+```
+4. Search away at [localhost:5000](http://localhost:5000)
 
 ## Tutorials:
 To get a grip for elasticsearch I'd recommend following some tutorials
