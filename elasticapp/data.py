@@ -1,4 +1,4 @@
-import os, textwrap, re
+import os, textwrap, re, csv
 
 _all_questions = None
 _all_answers = None
@@ -112,17 +112,14 @@ def all_questions(test=True):
 		r = r'({}\,\"{}\s{}\"\,{}\,{})\,'.format(rId, rDate, rTime, rId, rId)
 		results = re.split(r, all_lines)
 
-		count = 0
 		for info, text in zip(*[iter(results[1:])]*2):
-
 			rT = r'\"(.*?)\"'
 			rN = r'\\N'
 			data = info.split(',') + list(re.findall(rT+r','+rT+r'|'+rN, text)[0])
 			q_data = QuestionData(*data)
 			_all_questions.append(q_data)
-			count += 1
 
-		print("Loaded {} questions".format(count))
+		print("Loaded {} questions".format(len(_all_questions)))
 		return _all_questions
 
 def all_answers(test=True):
@@ -148,13 +145,11 @@ def all_answers(test=True):
 		r = r'{}\,\"{}\"\,{}\,{}\,\"{}\"\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
 		results = re.findall(r, all_lines)
 
-		count = 0
 		for result in results:
 			a_data = AnswerData(*result)
 			_all_answers.append(a_data)
-			count += 1
 
-		print("Loaded {} answers".format(count))
+		print("Loaded {} answers".format(len(_all_answers)))
 		return _all_answers
 
 
@@ -180,13 +175,29 @@ def all_users():
 		r = r'{}\,\"{}\"\,{}\,{}'.format(rN, rDate, rT, rN)
 		results = re.findall(r, all_lines)
 
-		count = 0
 		for result in results:
 			u_data = UserData(*result)
 			_all_users.append(u_data)
-			count += 1
 
-		print("Loaded {} users".format(count))
+		print("Loaded {} users".format(len(_all_users)))
 		return _all_users
 
 
+def all_categories():
+	global _all_categories
+
+	if _all_categories is None:
+		_all_categories = []
+
+		file_name = 'data/categories.csv'
+
+		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		file_path = os.path.join(parent_dir, file_name)
+		
+		with open(file_path) as file:
+			for line in csv.reader(file):
+				c_data = CategoryData(*line)
+				_all_categories.append(c_data)
+
+		print("Loaded {} categories".format(len(_all_categories)))
+		return _all_categories
