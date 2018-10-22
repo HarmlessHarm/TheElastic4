@@ -1,9 +1,7 @@
-import csv, os, textwrap, re
+import os, textwrap, re
 
 _all_questions = None
 _all_answers = None
-
-
 
 class QuestionData(object):
 	"""
@@ -57,6 +55,38 @@ class AnswerData(object):
 			""").format(self.answerId, self.date, self.userId, self.questionId, 
 									self.answer, self.thumbsDown, self.thumbsUp, self.isBestAnswer)
 
+
+class CategoryData(object):
+	"""docstring for CategoryData"""
+	def __init__(self, catId, parentId, category):
+		self.catId = catId
+		self.parentId = parentId
+		self.category = category
+		
+	def __str__(self):
+		return textwrap.dedent("""\
+			catId : {}
+			parentId : {}
+			category : {}
+			""").format(self.catId, self.parentId, self.category)
+
+
+class UserData(object):
+	"""docstring for UserData"""
+	def __init__(self, userId, regDate, expertise, bestAnswers):
+		self.userId = userId
+		self.regDate = regDate
+		self.expertise = expertise
+		self.bestAnswers = bestAnswers
+
+	def __str_(self):
+		return textwrap.dedent("""\
+			userId : {}
+			regDate : {}
+			expertise : {}
+			bestAnswers : {}
+			""").format(self.userId, self.regDate, self.expertise, self.bestAnswers)
+		
 def all_questions(test=True):
 	"""
 	Returns a list with all questions parsed from ../data/questions.csv
@@ -74,26 +104,26 @@ def all_questions(test=True):
 		with open(file_path) as file:
 			all_lines = file.read().replace('\n', ' ')
 			
-			rId = r'[0-9]+'
-			rDate = r'[0-9]{4}\-[0-9]{2}\-[0-9]{2}'
-			rTime = r'[0-9]{2}\:[0-9]{2}\:[0-9]{2}'
-			r = r'({}\,\"{}\s{}\"\,{}\,{})\,'.format(rId, rDate, rTime, rId, rId)
-			results = re.split(r, all_lines)
+		rId = r'[0-9]+'
+		rDate = r'[0-9]{4}\-[0-9]{2}\-[0-9]{2}'
+		rTime = r'[0-9]{2}\:[0-9]{2}\:[0-9]{2}'
+		r = r'({}\,\"{}\s{}\"\,{}\,{})\,'.format(rId, rDate, rTime, rId, rId)
+		results = re.split(r, all_lines)
 
-			count = 0
-			for info, text in zip(*[iter(results[1:])]*2):
+		count = 0
+		for info, text in zip(*[iter(results[1:])]*2):
 
-				rT = r'\"(.*?)\"'
-				rN = r'\\N'
-				data = info.split(',') + list(re.findall(rT+r','+rT+r'|'+rN, text)[0])
-				q_data = QuestionData(*data)
-				_all_questions.append(q_data)
-				count += 1
-			print("Loaded {} questions".format(count))
+			rT = r'\"(.*?)\"'
+			rN = r'\\N'
+			data = info.split(',') + list(re.findall(rT+r','+rT+r'|'+rN, text)[0])
+			q_data = QuestionData(*data)
+			_all_questions.append(q_data)
+			count += 1
+		print("Loaded {} questions".format(count))
 
 def all_answers(test=True):
 	"""
-	Returns a list with all questions parsed from ../data/questions.csv
+	Returns a list with all answers parsed from ../data/answers.csv
 	"""
 	global _all_answers
 
@@ -108,19 +138,16 @@ def all_answers(test=True):
 		with open(file_path) as file:
 			all_lines = file.read().replace('\n', ' ')
 			
-			rN = r'([0-9]+)'
-			rDate = r'([0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2})'
-			rT = r'(.*?)'
-			r = r'{}\,\"{}\"\,{}\,{}\,{}\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
-			results = re.findall(r, all_lines)
+		rN = r'([0-9]+)'
+		rDate = r'([0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2})'
+		rT = r'(.*?)'
+		r = r'{}\,\"{}\"\,{}\,{}\,{}\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
+		results = re.findall(r, all_lines)
 
-			count = 0
-			for result in results:
-				a_data = AnswerData(*result)
-				_all_answers.append(a_data)
-				count += 1
+		count = 0
+		for result in results:
+			a_data = AnswerData(*result)
+			_all_answers.append(a_data)
+			count += 1
 
 			print("Loaded {} answers".format(count))
-
-all_questions(True)
-all_answers(True)
