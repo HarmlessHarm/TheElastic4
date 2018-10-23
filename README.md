@@ -4,7 +4,6 @@ Elastic Search assignment for the zoekmachines course at University of Amsterdam
 #### Authors
 | Name  | Stud. Nr.  |
 |---|---|
-| Flip van Wijk |   |
 | Harm Manders  | 10677186  |
 | Kjeld Oostra  |   |
 | Sander Hansen | 10995080  |
