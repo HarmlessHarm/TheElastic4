@@ -89,20 +89,21 @@ class UserData(object):
 			bestAnswers : {}
 			""").format(self.userId, self.regDate, self.expertise, self.bestAnswers)
 		
-def all_questions(test=True):
+def all_questions(test=False):
 	"""
 	Returns a list with all questions parsed from ../data/questions.csv
 	"""
 	global _all_questions
 
 	if _all_questions is None:
+		print("Loading in questions data file")
+		
 		_all_questions = []
 		file_name = 'data/questions.csv'
 		if test: file_name = 'data/q1000.csv'
 
 		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 		file_path = os.path.join(parent_dir, file_name)
-		
 		with open(file_path) as file:
 			all_lines = file.read().replace('\n', ' ')
 			
@@ -112,23 +113,27 @@ def all_questions(test=True):
 		r = r'({}\,\"{}\s{}\"\,{}\,{})\,'.format(rId, rDate, rTime, rId, rId)
 		results = re.split(r, all_lines)
 
-		for info, text in zip(*[iter(results[1:])]*2):
+		for i, (info, text) in enumerate(zip(*[iter(results[1:])]*2)):
+			if i % int(len(results)/2 / 50)== 0:
+				print('.', end="", flush=True)
 			rT = r'\"(.*?)\"'
 			rN = r'\\N'
 			data = info.split(',') + list(re.findall(rT+r','+rT+r'|'+rN, text)[0])
 			q_data = QuestionData(*data)
 			_all_questions.append(q_data)
 
-		print("Loaded {} questions".format(len(_all_questions)))
+		print("\nLoaded {} questions".format(len(_all_questions)))
 		return _all_questions
 
-def all_answers(test=True):
+def all_answers(test=False):
 	"""
 	Returns a list with all answers parsed from ../data/answers.csv
 	"""
 	global _all_answers
 
 	if _all_answers is None:
+		print("Loading in answers data file")
+
 		_all_answers = []
 		file_name = 'data/answers.csv'
 		if test: file_name = 'data/a1000.csv'
@@ -145,11 +150,13 @@ def all_answers(test=True):
 		r = r'{}\,\"{}\"\,{}\,{}\,\"{}\"\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
 		results = re.findall(r, all_lines)
 
-		for result in results:
+		for i, result in enumerate(results):
+			if i % int(len(results)/ 50)== 0:
+				print('.', end="", flush=True)
 			a_data = AnswerData(*result)
 			_all_answers.append(a_data)
 
-		print("Loaded {} answers".format(len(_all_answers)))
+		print("\nLoaded {} answers".format(len(_all_questions)))
 		return _all_answers
 
 
