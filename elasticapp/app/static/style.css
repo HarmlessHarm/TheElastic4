@@ -5,6 +5,7 @@ body {
     font-size:14px;
     margin:0;
     padding:0;
+    background:#fefefe;
 }
 
 .bulk-results {
@@ -15,10 +16,41 @@ body {
 .search-results > div {
     border:1px solid #5b8bd3;
     border-radius: 4px;
-    padding:8px;
+    padding:8px 40px 20px 8px;
     margin:8px;
     color:#333;
     background:#e0ebfc;
+}
+
+.search-results > div:hover {
+    cursor:pointer;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+}
+
+.search-results > div > span:first-of-type {
+    font-weight:bold
+}
+
+.search-results > div > span:last-of-type {
+    color:#777;
+}
+
+.search-results > div:hover .q-btn {
+    visibility: visible;
+}
+
+.q-btn {
+    left:100%;
+    margin: -8px 0 -8px 0;
+    width:32px;
+    background: #5b8bd3;
+    position: relative;
+    font-size: 20px;
+    color:white;
+    padding: 4px;
+    text-align: center;
+    border-bottom-left-radius: 4px;
+    visibility: hidden;
 }
 
 .bulk-results, #details-panel {
@@ -32,8 +64,9 @@ body {
     margin: 0;
     padding: 8px;
     border-bottom:1px solid #ccc;
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.5);
     text-align:center;
+    z-index:1000;
 }
 
 #search-bar input {
@@ -64,6 +97,7 @@ button:hover {
     float:left;
     width:50%;
     text-align:center;
+    padding-top:10px;
 }
 
 .search {
@@ -80,3 +114,29 @@ button:hover {
     float:left;
     font-size:10px;
 }
+
+#popup {
+    position:fixed;
+    width: calc(50vw - 48px);
+    left:50%;
+    top:124px;
+    height: calc(100vh - 172px);
+    border-radius:8px;
+    border:1px solid #ccc;
+    background:white;
+    padding:16px;
+    z-index:1000;
+    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.5);
+
+}
+
+#close {
+    color:#ccc;
+    font-size:24px;
+    margin: -8px;
+    position:absolute;
+}
+
+#close:hover {
+    color:#999;
+    cursor:pointer;
