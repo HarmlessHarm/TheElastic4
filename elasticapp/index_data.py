@@ -13,6 +13,7 @@ def main():
 			'mappings':{},
 			'settings':{},
 		})
+	helpers.bulk(es, questions_to_index(all_questions()))
 
 	es.indices.delete(index=A_INDEX, ignore=404)
 	es.indices.create(
@@ -22,8 +23,27 @@ def main():
 			'settings':{},
 		})
 
-	# helpers.bulk(es, questions_to_index(all_questions()))
 	helpers.bulk(es, answers_to_index(all_answers()))
+
+	es.indices.delete(index=C_INDEX, ignore=404)
+	es.indices.create(
+		index=C_INDEX,
+		body={
+			'mappings':{},
+			'settings':{},
+		})
+
+	helpers.bulk(es, categories_to_index(all_categories()))
+
+	es.indices.delete(index=U_INDEX, ignore=404)
+	es.indices.create(
+		index=U_INDEX,
+		body={
+			'mappings':{},
+			'settings':{},
+		})
+
+	helpers.bulk(es, users_to_index(all_users()))
 
 def questions_to_index(questions):
 	# Generator function that yields data objects
@@ -68,6 +88,43 @@ def answers_to_index(answers):
 			}
 		}
 	print("\nFinished indexing {} answers".format(len(answers)))
+
+
+def categories_to_index(categories):
+	print("Indexing categories")
+	for i, c in enumerate(categories):
+		if i % int(len(categories) / 50) == 0:
+			print('.', end="", flush=True)
+		yield {
+			'_op_type': 'create',
+			'_index': C_INDEX,
+			'_type': C_DOC_T,
+			'_id': c.categoryId,
+			'_source': {
+				'parentId': c.parentId,
+				'name': c.name,
+			}
+		}
+	print("\nFinished indexing {} categories".format(len(categories)))
+
+def users_to_index(users):
+	print("Indexing users")
+	for i, u in enumerate(users):
+		if i % int(len(users) / 50) == 0:
+			print('.', end="", flush=True)
+		yield {
+			'_op_type': 'create',
+			'_index': U_INDEX,
+			'_type': U_DOC_T,
+			'_id': u.userId,
+			'_source': {
+				'date': u.date,
+				'expertise': u.expertise,
+				'bestAnswers': u.bestAnswers,
+			}
+		}
+	print("\nFinished indexing {} users".format(len(users)))
+
 
 if __name__ == '__main__':
 	main()

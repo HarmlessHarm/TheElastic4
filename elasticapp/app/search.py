@@ -34,7 +34,16 @@ def search(term:str, count:int) -> List[SearchResult]:
 			'question': {
 				'query': term,
 				'operator': 'and',
-				'fuzziness': 'AUTO',
+				'fuzziness': 'AUTO:4,8',
+			}
+		}
+	}
+	d_query = {
+		'match': {
+			'description': {
+				'query': term,
+				'operator': 'and',
+				'fuzziness': 'AUTO:4,8',
 			}
 		}
 	}

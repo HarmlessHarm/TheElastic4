@@ -60,34 +60,34 @@ class AnswerData(object):
 
 class CategoryData(object):
 	"""docstring for CategoryData"""
-	def __init__(self, catId, parentId, category):
-		self.catId = catId
+	def __init__(self, categoryId, parentId, name):
+		self.categoryId = categoryId
 		self.parentId = parentId
-		self.category = category
+		self.name = name
 		
 	def __str__(self):
 		return textwrap.dedent("""\
-			catId : {}
+			categoryId : {}
 			parentId : {}
-			category : {}
-			""").format(self.catId, self.parentId, self.category)
+			name : {}
+			""").format(self.categoryId, self.parentId, self.name)
 
 
 class UserData(object):
 	"""docstring for UserData"""
-	def __init__(self, userId, regDate, expertise, bestAnswers):
+	def __init__(self, userId, date, expertise, bestAnswers):
 		self.userId = userId
-		self.regDate = regDate
+		self.date = date
 		self.expertise = expertise
 		self.bestAnswers = bestAnswers
 
 	def __str__(self):
 		return textwrap.dedent("""\
 			userId : {}
-			regDate : {}
+			date : {}
 			expertise : {}
 			bestAnswers : {}
-			""").format(self.userId, self.regDate, self.expertise, self.bestAnswers)
+			""").format(self.userId, self.date, self.expertise, self.bestAnswers)
 		
 def all_questions(test=False):
 	"""
