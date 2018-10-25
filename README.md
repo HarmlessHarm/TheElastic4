@@ -73,6 +73,6 @@ python elasticapp/run.py
 ```
 4. Search away at [localhost:5000](http://localhost:5000)
 
-## Tutorials:
-To get a grip for elasticsearch I'd recommend following some tutorials
-- PyCon2018 ElasticSearch [video](https://www.youtube.com/watch?v=6_P_h2bDwYs), [repo](https://github.com/julieqiu/pycon-2018-pyelasticsearch), [completed repo](https://github.com/HarmlessHarm/elastic_tut)
+<!-- ## Tutorials: -->
+<!-- To get a grip for elasticsearch I'd recommend following some tutorials -->
+<!-- - PyCon2018 ElasticSearch [video](https://www.youtube.com/watch?v=6_P_h2bDwYs), [repo](https://github.com/julieqiu/pycon-2018-pyelasticsearch), [completed repo](https://github.com/HarmlessHarm/elastic_tut) -->
