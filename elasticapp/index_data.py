@@ -14,8 +14,16 @@ def main():
 			'settings':{},
 		})
 
-	helpers.bulk(es, questions_to_index(all_questions(True)))
-	helpers.bulk(es, answers_to_index(all_answers(True)))
+	es.indices.delete(index=A_INDEX, ignore=404)
+	es.indices.create(
+		index=A_INDEX,
+		body={
+			'mappings':{},
+			'settings':{},
+		})
+
+	# helpers.bulk(es, questions_to_index(all_questions()))
+	helpers.bulk(es, answers_to_index(all_answers()))
 
 def questions_to_index(questions):
 	# Generator function that yields data objects

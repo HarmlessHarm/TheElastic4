@@ -149,14 +149,15 @@ def all_answers(test=False):
 		rT = r'(.*?)'
 		r = r'{}\,\"{}\"\,{}\,{}\,\"{}\"\,{}\,{}\,{}'.format(rN, rDate, rN, rN, rT, rN, rN, rN)
 		results = re.findall(r, all_lines)
-
+		ids = []
 		for i, result in enumerate(results):
 			if i % int(len(results)/ 50)== 0:
 				print('.', end="", flush=True)
 			a_data = AnswerData(*result)
+			int(a_data.answerId)
 			_all_answers.append(a_data)
 
-		print("\nLoaded {} answers".format(len(_all_questions)))
+		print("\nLoaded {} answers".format(len(_all_answers)))
 		return _all_answers
 
 
