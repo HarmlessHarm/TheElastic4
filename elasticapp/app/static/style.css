@@ -5,7 +5,8 @@ body {
     font-size:14px;
     margin:0;
     padding:0;
-    background:#fefefe;
+    background:url('/static/stripes-light.png');
+    background-attachment: fixed;
 }
 
 .bulk-results {
@@ -59,11 +60,11 @@ body {
 
 #search-bar {
     position: fixed;
-    background: white;
+    background: #5b8bd3;
     width: 100%;
     margin: 0;
     padding: 8px;
-    border-bottom:1px solid #ccc;
+    border-bottom:1px solid #888;
     box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.5);
     text-align:center;
     z-index:1000;
@@ -74,17 +75,17 @@ body {
     font-size:24px;
     color:#888;
     margin-right:0;
-    border-width: 1px 0 1px 1px;
+    border-width: 2px 0 2px 2px;
     border-style: solid;
-    border-color: #5b8bd3;
+    border-color: #e0ebfc;
 }
 
 #search-bar button {
-    padding:8px;
+    padding:9px;
     font-size:24px;
-    color:white;
-    background:#5b8bd3;
-    border-color:#5b8bd3;
+    color:#5b8bd3;
+    background:#e0ebfc;
+    border-color:#e0ebfc;
     margin-left:0;
 
 }
