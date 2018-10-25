@@ -13,9 +13,10 @@
   		<div class="search">
   			Showing results for <span>{{term}}</span>
   		</div>
-  		<div class="search-results">
+  		<div class="search-results" onclick="openPopup()">
   			{% for q in questions %}
   			<div>
+          <div class="q-btn">&raquo;</div>
   				<span>{{q.question}}</span>
   				<span>{{q.description}}</span>
   			</div>
@@ -37,8 +38,19 @@
     </div>
   </div>
 
+  <div id="popup" style="display:none;"><span id="close" onclick="closePopup()">&times;</span><h1>Hallo?</h1></div>
+
   <script>
     PANEL_WIDTH = $("#details-panel").width()
+    var openPopup = function() {
+      $("#popup").show()
+    }
+
+    var closePopup = function() {
+      $("#popup").hide()
+    }
+
+
   </script>
 
   <!-- HISTOGRAM -->
