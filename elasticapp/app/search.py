@@ -31,23 +31,29 @@ def search(term:str, count:int) -> List[SearchResult]:
 	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
 	q_query = {
 		'match': {
-			'question': {
+			'question.dutch_analyzed': {
 				'query': term,
 				'operator': 'and',
-				'fuzziness': 'AUTO:4,8',
+				'fuzziness': '1',
 			}
 		}
 	}
 	d_query = {
 		'match': {
-			'description': {
+			'description.dutch_analyzed': {
 				'query': term,
 				'operator': 'and',
-				'fuzziness': 'AUTO:4,8',
+				'fuzziness': '1',
 			}
 		}
 	}
+	dis_max = {
+		'dis_max': {
+			'tie_breaker': 0.7,
+			'queries': [q_query, d_query],
+		}
+	}
 
-	docs = s.query(q_query)[:count].execute()
+	docs = s.query(dis_max)[:count].execute()
 
 	return [SearchResult.from_doc(d) for d in docs]

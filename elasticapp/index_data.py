@@ -3,27 +3,66 @@ from elasticsearch import Elasticsearch, helpers
 from elasticapp.constants import *
 from elasticapp.data import *
 
-def main():
+import sys
+
+def main(test):
 	es = Elasticsearch()
 
 	es.indices.delete(index=Q_INDEX, ignore=404)
 	es.indices.create(
 		index=Q_INDEX,
 		body={
-			'mappings':{},
+			'mappings':{
+				Q_DOC_T: {
+					'properties': {
+						'question': {
+							'type': 'text',
+							'fields': {
+								'dutch_analyzed': {
+									'type': 'text',
+									'analyzer': 'dutch'
+								}
+							}
+						},
+						'description': {
+							'type': 'text',
+							'fields': {
+								'dutch_analyzed': {
+									'type': 'text',
+									'analyzer': 'dutch'
+								}
+							}
+						}
+					},
+				},
+			},
 			'settings':{},
 		})
-	helpers.bulk(es, questions_to_index(all_questions()))
+	helpers.bulk(es, questions_to_index(all_questions(test)))
 
 	es.indices.delete(index=A_INDEX, ignore=404)
 	es.indices.create(
 		index=A_INDEX,
 		body={
-			'mappings':{},
+			'mappings':{
+				A_DOC_T: {
+					'properties': {
+						'answer': {
+							'type': 'text',
+							'fields': {
+								'dutch_analyzed': {
+									'type': 'text',
+									'analyzer': 'dutch'
+								}
+							}
+						},
+					},
+				}
+			},
 			'settings':{},
 		})
 
-	helpers.bulk(es, answers_to_index(all_answers()))
+	helpers.bulk(es, answers_to_index(all_answers(test)))
 
 	es.indices.delete(index=C_INDEX, ignore=404)
 	es.indices.create(
@@ -127,4 +166,7 @@ def users_to_index(users):
 
 
 if __name__ == '__main__':
-	main()
+	test = False
+	if len(sys.argv) > 1 and sys.argv[1] == 'test':
+		test = True
+	main(test)
