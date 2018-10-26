@@ -65,7 +65,7 @@ def getQuestions(term:str) -> List[QuestionResult]:
 		}
 	}
 
-	docs = s.query(dis_max).execute()
+	docs = s.query(dis_max)[:100].execute()
 
 	return [QuestionResult.from_doc(d) for d in docs]
 
