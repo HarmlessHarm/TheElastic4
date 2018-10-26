@@ -6,22 +6,24 @@ from elasticapp.constants import *
 
 HEADERS = {'content-type': 'application/json'}
 
-class SearchResult(object):
-	"""docstring for SearchResult"""
-	def __init__(self, qid, question, description):
-		self.id = qid
+class QuestionResult(object):
+	"""docstring for QuestionResult"""
+	def __init__(self, questionId, date, question, description):
+		self.questionId = questionId
+		self.date = date
 		self.question = question
 		self.description = description
 
-	def from_doc(doc) -> 'SearchResult':
-		return SearchResult(
-				qid = doc.meta.id,
+	def from_doc(doc) -> 'QuestionResult':
+		return QuestionResult(
+				questionId = doc.meta.id,
+				date = doc.date,
 				question = doc.question,
 				description = doc.description,
 			)
 
 class AnswerResult(object):
-	"""docstring for SearchResult"""
+	"""docstring for QuestionResult"""
 	def __init__(self, answer):
 		self.answer = answer
 
@@ -31,7 +33,7 @@ class AnswerResult(object):
 				answer = doc.answer,
 			)
 
-def search(term:str, count:int) -> List[SearchResult]:
+def getQuestions(term:str) -> List[QuestionResult]:
 	client = Elasticsearch()
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
@@ -62,12 +64,12 @@ def search(term:str, count:int) -> List[SearchResult]:
 		}
 	}
 
-	docs = s.query(dis_max)[:count].execute()
+	docs = s.query(dis_max).execute()
 
-	return [SearchResult.from_doc(d) for d in docs]
+	return [QuestionResult.from_doc(d) for d in docs]
 
 
-def findAnswers(query):
+def getAnswers(questionId):
 	client = Elasticsearch()
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
@@ -76,7 +78,7 @@ def findAnswers(query):
 
 	a_query = {
 		'term': {
-			'questionId': query
+			'questionId': questionId
 		}
 	}
 

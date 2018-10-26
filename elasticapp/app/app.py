@@ -1,29 +1,26 @@
 from flask import Flask, render_template, request
 
-from elasticapp.app.search import search, findAnswers
+from elasticapp.app.search import getQuestions, getAnswers
 
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/index')
 def index():
-	search_terms = [
-		'konijn',
-		'nederlandse',
-		'nederndse',
-	]
-
-	num_results = 9
-	results = [(t, search(t, num_results)) for t in search_terms]
-	return render_template('index.html', results=results)
+	
+	return render_template('index.html', results=None)
 
 
 @app.route('/search', methods=['GET','POST'])
 def search_question():
 
 	query = request.args.get('search')
-	num_results = 50
-	results = [(query, search(query, num_results))]
+	questions = getQuestions(query)
+	results = {}
+	for q in questions:
+		answers = getAnswers(q.questionId)
+		results[q.questionId] = {'question': q, 'answers': answers}
+
 	return render_template('index.html', results=results,search_term=query)
 
 
@@ -32,6 +29,5 @@ def search_question():
 def search_answers():
 
 	query = request.args.get('search')
-	print("QUERY--------------------",query)
 	results = [(findAnswers(query))]
 	return render_template('answer.html', results=results)

@@ -7,22 +7,19 @@
     <input type="text" placeholder="Search.." name="search" value="{{ search_term }}"><!--
     --><button type="submit"><i class="fa fa-search">&rarr;</i></button>
   </form>
-
+  {% if results != None %}
   <div class="bulk-results">
-  	{% for term, questions in results %}
   		<div class="search">
-  			Showing results for <span>{{term}}</span>
+  			Showing results for <span>{{ search_term }}</span>
   		</div>
   		<div class="search-results" onclick="openPopup()">
-  			{% for q in questions %}
+      {% for question in results %}
   			<div>
           <div class="q-btn">&raquo;</div>
-  				<span>{{q.question}}</span>
-  				<span>{{q.description}}</span>
+  				<span>{{question}}</span>
   			</div>
-  			{% endfor %}
+      {% endfor %}
   		</div>
-  	{% endfor %}
   </div>
 
   <div id="details-panel">
@@ -199,5 +196,6 @@
       d3.layout.cloud().stop();
     }
   </script>
+  {% endif %}
 
 {% endblock %}
