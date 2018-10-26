@@ -84,9 +84,13 @@ def getAdvanced(query) -> List[QuestionResult]:
 		'query_string': {
 			'query': query,
 			'fields': ["question.dutch_analyzed^3", "description.dutch_analyzed" ],
-			'tie_breaker': 0
+			'tie_breaker': 0,
+			'fuzziness': 0,
+
 		}
 	}
+
+	print("ADVANCED==================================")
 
 	docs = s.query(search)[:100].execute()
 
