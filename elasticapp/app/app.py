@@ -19,16 +19,6 @@ def search_question():
 	questions = getQuestions(query)
 	return render_template('index.html', results=questions,search_term=query)
 
-
-
-@app.route('/question', methods=['GET', 'POST'])
-def search_answers():
-
-	query = request.args.get('search')
-	results = [(findAnswers(query))]
-	return render_template('answer.html', results=results)
-
-
 def make_timeline(results):
 	dates = []
 

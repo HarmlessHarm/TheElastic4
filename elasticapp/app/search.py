@@ -20,7 +20,7 @@ class QuestionResult(object):
 				questionId = doc.meta.id,
 				date = doc.date,
 				question = doc.question,
-				description = doc.description
+				description = doc.description,
 			)
 
 class AnswerResult(object):
@@ -70,7 +70,7 @@ def getQuestions(term:str) -> List[QuestionResult]:
 	return [QuestionResult.from_doc(d) for d in docs]
 
 
-def getAnswers(questionId):
+def getAnswers(questionId) -> List[AnswerResult]:
 	client = Elasticsearch()
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
