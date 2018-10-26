@@ -8,9 +8,11 @@ HEADERS = {'content-type': 'application/json'}
 
 class QuestionResult(object):
 	"""docstring for QuestionResult"""
-	def __init__(self, questionId, date, question, description):
+	def __init__(self, questionId, date, userId, categoryId, question, description):
 		self.questionId = questionId
 		self.date = date
+		self.userId = userId
+		self.categoryId = categoryId
 		self.question = question
 		self.description = description
 		self.answers = getAnswers(questionId)
@@ -19,19 +21,33 @@ class QuestionResult(object):
 		return QuestionResult(
 				questionId = doc.meta.id,
 				date = doc.date,
+				userId = doc.userId,
+				categoryId = doc.categoryId,
 				question = doc.question,
 				description = doc.description,
 			)
 
 class AnswerResult(object):
 	"""docstring for QuestionResult"""
-	def __init__(self, answer):
+	def __init__(self, answer, userId, questionId, thumbsUp, thumbsDown, isBestAnswer):
 		self.answer = answer
+		self.answer = doc.answer,
+		self.userId = doc.userId,
+		self.questionId = doc.questionId,
+		self.thumbsUp = doc.thumbsUp,
+		self.thumbsDown = doc.thumbsDown,
+		self.isBestAnswer = doc.isBestAnswer,
 
 	def from_doc(doc) -> 'AnswerResult':
 
 		return AnswerResult(
+				answerId = doc.meta.id,
 				answer = doc.answer,
+				userId = doc.userId,
+				questionId = doc.questionId,
+				thumbsUp = doc.thumbsUp,
+				thumbsDown = doc.thumbsDown,
+				isBestAnswer = doc.isBestAnswer,
 			)
 
 def getQuestions(term:str) -> List[QuestionResult]:
