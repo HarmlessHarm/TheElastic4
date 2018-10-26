@@ -13,14 +13,12 @@ class SearchResult(object):
 		self.id = qid
 		self.question = question
 		self.description = description
-		self.date = date
 
 	def from_doc(doc) -> 'SearchResult':
 		return SearchResult(
 				qid = doc.meta.id,
 				question = doc.question,
 				description = doc.description,
-				date = doc.date,
 			)
 		pass
 
