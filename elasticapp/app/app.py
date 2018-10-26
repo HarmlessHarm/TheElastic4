@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 from elasticapp.app.search import getQuestions, getAnswers
+from collections import Counter
 
 app = Flask(__name__)
 
@@ -31,3 +32,16 @@ def search_answers():
 	query = request.args.get('search')
 	results = [(findAnswers(query))]
 	return render_template('answer.html', results=results)
+
+
+def make_timeline(results):
+	dates = []
+
+	# Results moeten nog verder uitgepakt worden
+	for r in results:
+		date = r.date[1:5]
+		dates.append(date)
+
+	timeline = Counter(dates)
+
+	return timeline
