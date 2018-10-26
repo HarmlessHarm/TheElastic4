@@ -38,37 +38,43 @@ def getQuestions(term:str) -> List[QuestionResult]:
 	client = Elasticsearch()
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
+	
+	fuzziness = 0
+	if len(term.split(' ')) > 1:
+		fuzziness = 'AUTO'
 
 	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
-	q_query = {
-		'match': {
-			'question.dutch_analyzed': {
-				'query': term,
-				'operator': 'and',
-				'fuzziness': '1',
-			}
-		}
-	}
-	d_query = {
-		'match': {
-			'description.dutch_analyzed': {
-				'query': term,
-				'operator': 'and',
-				'fuzziness': '1',
-			}
-		}
-	}
-	dis_max = {
-		'dis_max': {
+	search = {
+		'multi_match': {
+			'query': term,
+			'type': 'best_fields',
+			"fields": [ "question.dutch_analyzed^3", "description.dutch_analyzed" ],
 			'tie_breaker': 0.7,
-			'queries': [q_query, d_query],
+			'fuzziness': fuzziness,
 		}
 	}
 
-	docs = s.query(dis_max)[:100].execute()
+	docs = s.query(search)[:100].execute()
 
 	return [QuestionResult.from_doc(d) for d in docs]
 
+def getAdvanced(query) -> List[QuestionResult]:
+
+	client = Elasticsearch()
+	client.transport.connection_pool.connection.headers.update(HEADERS)
+	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
+
+	search = {
+		'query_string': {
+			'query': query,
+			'fields': ["question.dutch_analyzed^3", "description.dutch_analyzed" ],
+			'tie_breaker': 0
+		}
+	}
+
+	docs = s.query(search)[:100].execute()
+
+	return [QuestionResult.from_doc(d) for d in docs]
 
 def getAnswers(questionId) -> List[AnswerResult]:
 	client = Elasticsearch()
