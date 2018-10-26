@@ -18,7 +18,8 @@ def search_question():
 	query = request.args.get('search')
 	questions = getQuestions(query)
 	timeline = make_timeline(questions)
-	return render_template('index.html', results=questions,search_term=query,timeline=timeline)
+	wordcloud = make_wordcloud(questions)
+	return render_template('index.html', results=questions,search_term=query,timeline=timeline,wordcloud=wordcloud)
 
 def make_timeline(results):
 	dates = []
@@ -32,3 +33,14 @@ def make_timeline(results):
 	# timeline = Counter(dates)
 
 	return dates
+
+def make_wordcloud(results):
+	answers = {}
+	for r in results:
+		answers[r.questionId] = []
+		for a in r.answers:
+			answers[r.questionId].append(a.answer)
+	print(answers)
+
+
+	return answers
