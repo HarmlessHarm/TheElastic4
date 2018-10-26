@@ -48,10 +48,22 @@
                 <div class="tab-pane fade show active" id="question-{{q.questionId}}" role="tabpanel">
                   <h5 class="card-title">{{q.question}}</h5>
                   <p class="card-text">{{q.description}}</p>
+				  <p class="card-text"><small class="text-muted">{{q.date[1:-1]}}</small></p>
                 </div>
                 <div class="tab-pane fade" id="answers-{{q.questionId}}" role="tabpanel">
                   <h5 class="card-title">Answers</h5>
-                  <p class="card-text">hello</p>
+				  {% if q.answers|length != 0 %}
+				  <ul class="list-group list-group-flush">
+				  {% for a in q.answers %}
+				  <li class="list-group-item">
+				  <p class="card-text">{{a.answer}}</p>
+			  	  </li>
+				  {% endfor %}
+				  {% else %}
+				  <p class="card-text">Geen antwoorden gevonden</p>
+				  {% endif %}
+
+			  </ul>
                 </div>
                 <div class="tab-pane fade statistics" id="statistics-{{q.questionId}}" role="tabpanel">
                   <h5 class="card-title">Statistics</h5>
@@ -160,7 +172,7 @@
       .call(xAxis)
       .call(function() {$('g text').each(function() {
           var text = $(this).text();
-          $(this).text(text.replace('.', '2')); 
+          $(this).text(text.replace('.', '2'));
       });});
 
   </script>
