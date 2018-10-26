@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from elasticapp.app.search import search
+from elasticapp.app.search import search, findAnswers
 
 app = Flask(__name__)
 
@@ -25,3 +25,13 @@ def search_question():
 	num_results = 50
 	results = [(query, search(query, num_results))]
 	return render_template('index.html', results=results,search_term=query)
+
+
+
+@app.route('/question', methods=['GET', 'POST'])
+def search_answers():
+
+	query = request.args.get('search')
+	print("QUERY--------------------",query)
+	results = [(findAnswers(query))]
+	return render_template('answer.html', results=results)

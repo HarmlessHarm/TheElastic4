@@ -9,7 +9,6 @@ HEADERS = {'content-type': 'application/json'}
 class SearchResult(object):
 	"""docstring for SearchResult"""
 	def __init__(self, qid, question, description):
-		super(SearchResult, self).__init__()
 		self.id = qid
 		self.question = question
 		self.description = description
@@ -20,8 +19,17 @@ class SearchResult(object):
 				question = doc.question,
 				description = doc.description,
 			)
-		pass
 
+class AnswerResult(object):
+	"""docstring for SearchResult"""
+	def __init__(self, answer):
+		self.answer = answer
+
+	def from_doc(doc) -> 'AnswerResult':
+
+		return AnswerResult(
+				answer = doc.answer,
+			)
 
 def search(term:str, count:int) -> List[SearchResult]:
 	client = Elasticsearch()
@@ -57,3 +65,21 @@ def search(term:str, count:int) -> List[SearchResult]:
 	docs = s.query(dis_max)[:count].execute()
 
 	return [SearchResult.from_doc(d) for d in docs]
+
+
+def findAnswers(query):
+	client = Elasticsearch()
+
+	client.transport.connection_pool.connection.headers.update(HEADERS)
+
+	s = Search(using=client, index=A_INDEX, doc_type=A_DOC_T)
+
+	a_query = {
+		'term': {
+			'questionId': query
+		}
+	}
+
+	docs = s.query(a_query).execute()
+	
+	return [AnswerResult.from_doc(d) for d in docs]
