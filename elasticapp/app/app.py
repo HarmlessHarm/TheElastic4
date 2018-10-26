@@ -17,16 +17,18 @@ def search_question():
 
 	query = request.args.get('search')
 	questions = getQuestions(query)
-	return render_template('index.html', results=questions,search_term=query)
+	timeline = make_timeline(questions)
+	return render_template('index.html', results=questions,search_term=query,timeline=timeline)
 
 def make_timeline(results):
 	dates = []
 
 	# Results moeten nog verder uitgepakt worden
 	for r in results:
-		date = r.date[1:5]
+		date = int(r.date[1:5])
 		dates.append(date)
+	print(dates)
 
-	timeline = Counter(dates)
+	# timeline = Counter(dates)
 
-	return timeline
+	return dates

@@ -73,7 +73,11 @@
   var color = "steelblue";
 
   // Generate a 1000 data points using normal distribution with mean=20, deviation=5
-  var values = d3.range(1000).map(d3.random.normal(20, 5));
+  // var values = d3.range(1000).map(d3.random.normal(20, 5));
+  var values = $('#timeline-data').attr('data-timeline')
+  values = JSON.parse(values)
+  // values = values.map(Number)
+  console.log(typeof(values))
 
   // A formatter for counts.
   var formatCount = d3.format(",.0f");
