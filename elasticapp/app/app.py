@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from elasticapp.app.search import getQuestions, getAnswers
+from elasticapp.app.search import getQuestions, getAnswers, getAdvanced
 from collections import Counter
 
 app = Flask(__name__)
@@ -14,8 +14,10 @@ def index():
 
 @app.route('/search', methods=['GET','POST'])
 def search_question():
-
+	operators = ['AND', 'OR', 'NOT']
 	query = request.args.get('search')
+	if any(o in query for o in operators):
+		questions = getAdvanced(query)
 	questions = getQuestions(query)
 	timeline = make_timeline(questions)
 	wordcloud = make_wordcloud(questions)
@@ -28,7 +30,6 @@ def make_timeline(results):
 	for r in results:
 		date = int(r.date[1:5])
 		dates.append(date)
-	print(dates)
 
 	# timeline = Counter(dates)
 
