@@ -8,17 +8,19 @@ HEADERS = {'content-type': 'application/json'}
 
 class SearchResult(object):
 	"""docstring for SearchResult"""
-	def __init__(self, qid, question, description):
+	def __init__(self, qid, question, description, date):
 		super(SearchResult, self).__init__()
 		self.id = qid
 		self.question = question
 		self.description = description
+		self.date = date
 
 	def from_doc(doc) -> 'SearchResult':
 		return SearchResult(
 				qid = doc.meta.id,
 				question = doc.question,
 				description = doc.description,
+				date = doc.date,
 			)
 		pass
 

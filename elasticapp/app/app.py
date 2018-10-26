@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
-from pprint import pprint
+
 from elasticapp.app.search import search
+from collections import Counter
 
 app = Flask(__name__)
 
@@ -26,12 +27,14 @@ def search_question():
 	results = [(query, search(query, num_results))]
 	return render_template('index.html', results=results,search_term=query)
 
+def make_timeline(results):
+	dates = []
 
-@app.route('/timeline', methods=['GET','POST'])
-def get_timeline():
+	# Results moeten nog verder uitgepakt worden
+	for r in results:
+		date = r.date[1:5]
+		dates.append(date)
 
-	query = request.args.get('timeline')
-	num_results = 50
-	results = [(query, search(query, num_results))]
-	pprint(vars(search(query, 1)[0]))
-	return render_template('timeline.html', results=results,search_term=query)
+	timeline = Counter(dates)
+
+	return timeline
