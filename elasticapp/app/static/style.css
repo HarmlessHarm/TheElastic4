@@ -60,7 +60,7 @@ body {
 
 #search-bar {
     position: fixed;
-    background: #5b8bd3;
+    background: #009688;
     width: 100%;
     margin: 0;
     padding: 8px;
@@ -83,9 +83,8 @@ body {
 #search-bar button {
     padding:9px;
     font-size:24px;
-    color:#5b8bd3;
-    background:#e0ebfc;
-    border-color:#e0ebfc;
+    color:#00796B;
+    background:#B2DFDB;
     margin-left:0;
 
 }

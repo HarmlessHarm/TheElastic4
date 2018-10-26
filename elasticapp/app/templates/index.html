@@ -2,26 +2,44 @@
 
 {% block content %}
 
+	<!--  Bootstrap navigation bar -->
 	<div>{{ data }}</div>
-	<form id="search-bar" action="/search">
-    <input type="text" placeholder="Search.." name="search" value="{{ search_term }}"><!--
-    --><button type="submit"><i class="fa fa-search">&rarr;</i></button>
-  </form>
+	<nav class="navbar navbar-light bg-light">
+  		<a class="navbar-brand">The Elastic 4</a>
+  		<form class="form-inline" action="/search">
+    		<input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
+    		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  		</form>
+	</nav>
+
   {% if results != None %}
-  <div class="bulk-results">
-  		<div class="search">
-  			Showing results for <span>{{ search_term }}</span>
-  		</div>
-  		<div class="search-results" onclick="openPopup()">
-      {% for q in results %}
-  			<div>
-          <div class="q-btn">&raquo;</div>
-          <span>{{q.question}}</span>
-  				<span>{{q.description}}</span>
-  			</div>
-      {% endfor %}
-  		</div>
-  </div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<div class="widget">
+			      <h1>Timeline</h1>
+			      <div id="timeline"></div>
+			    </div>
+			</div>
+		</div>
+	  	<div class="row justify-content-center">
+			<div class="col-10">
+	  			<div class="search">
+	  				Showing results for <span>{{ search_term }}</span>
+	  			</div>
+	  			<div class="search-results">
+	      			{% for q in results %}
+	  			<div>
+	          	<div class="q-btn">&raquo;</div>
+	          		<span>{{q.question}}</span>
+	  				<span>{{q.description}}</span>
+	  			</div>
+	      		{% endfor %}
+	  			</div>
+			</div>
+		</div>
+	</div>
+
 
   <div id="details-panel">
 
@@ -35,8 +53,6 @@
       <div id="chart"></div>
     </div>
   </div>
-
-  <div id="popup" style="display:none;"><span id="close" onclick="closePopup()">&times;</span><h1>Hallo?</h1></div>
 
   <script>
     PANEL_WIDTH = $("#details-panel").width()
