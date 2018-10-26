@@ -13,10 +13,11 @@
   			Showing results for <span>{{ search_term }}</span>
   		</div>
   		<div class="search-results" onclick="openPopup()">
-      {% for question in results %}
+      {% for q in results %}
   			<div>
           <div class="q-btn">&raquo;</div>
-  				<span>{{question}}</span>
+          <span>{{q.question}}</span>
+  				<span>{{q.description}}</span>
   			</div>
       {% endfor %}
   		</div>

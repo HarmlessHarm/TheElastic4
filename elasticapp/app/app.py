@@ -17,12 +17,7 @@ def search_question():
 
 	query = request.args.get('search')
 	questions = getQuestions(query)
-	results = {}
-	for q in questions:
-		answers = getAnswers(q.questionId)
-		results[q.questionId] = {'question': q, 'answers': answers}
-
-	return render_template('index.html', results=results,search_term=query)
+	return render_template('index.html', results=questions,search_term=query)
 
 
 

@@ -13,13 +13,14 @@ class QuestionResult(object):
 		self.date = date
 		self.question = question
 		self.description = description
+		self.answers = getAnswers(questionId)
 
 	def from_doc(doc) -> 'QuestionResult':
 		return QuestionResult(
 				questionId = doc.meta.id,
 				date = doc.date,
 				question = doc.question,
-				description = doc.description,
+				description = doc.description
 			)
 
 class AnswerResult(object):
