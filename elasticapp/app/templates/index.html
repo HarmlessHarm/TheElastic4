@@ -23,18 +23,43 @@
 			</div>
 		</div>
 	  	<div class="row justify-content-center">
-			<div class="col-10">
+			<div class="col-8">
 	  			<div class="search">
 	  				Showing results for <span>{{ search_term }}</span>
 	  			</div>
 	  			<div class="search-results">
 	      		{% for q in results %}
-		  			<div class="card">
-						<div class="card-body">
-			          		<span>{{q.question}}</span>
-			  				<span>{{q.description}}</span>
-						</div>
-		  			</div>
+
+            <div class="card text-center">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#question-{{q.questionId}}">Question</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#answers-{{q.questionId}}">Answers</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#statistics-{{q.questionId}}">Statistics</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body tab-content">
+                <div class="tab-pane fade show active" id="question-{{q.questionId}}" role="tabpanel">
+                  <h5 class="card-title">{{q.question}}</h5>
+                  <p class="card-text">{{q.description}}</p>
+                </div>
+                <div class="tab-pane fade" id="answers-{{q.questionId}}" role="tabpanel">
+                  <h5 class="card-title">Answers</h5>
+                  <p class="card-text">hello</p>
+                </div>
+                <div class="tab-pane fade" id="statistics-{{q.questionId}}" role="tabpanel">
+                  <h5 class="card-title">Statistics</h5>
+                  <p class="card-text">joe</p>
+                </div>
+
+              </div>
+            </div><br>
 	      		{% endfor %}
 	  			</div>
 			</div>
