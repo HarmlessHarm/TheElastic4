@@ -16,9 +16,9 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-10">
-				<div class="widget">
-			      <h1>Timeline</h1>
-			      <div id="timeline"></div>
+				<div id="timeline-data" data-timeline="{{ timeline }}"></div>
+					<h1>Timeline</h1>
+			      	<div id="timeline"></div>
 			    </div>
 			</div>
 		</div>
@@ -28,12 +28,13 @@
 	  				Showing results for <span>{{ search_term }}</span>
 	  			</div>
 	  			<div class="search-results">
-	      			{% for q in results %}
-	  			<div>
-	          	<div class="q-btn">&raquo;</div>
-	          		<span>{{q.question}}</span>
-	  				<span>{{q.description}}</span>
-	  			</div>
+	      		{% for q in results %}
+		  			<div class="card">
+						<div class="card-body">
+			          		<span>{{q.question}}</span>
+			  				<span>{{q.description}}</span>
+						</div>
+		  			</div>
 	      		{% endfor %}
 	  			</div>
 			</div>
@@ -42,11 +43,6 @@
 
 
   <div id="details-panel">
-
-    <div class="widget">
-      <h1>Timeline</h1>
-      <div id="timeline"></div>
-    </div>
 
     <div class="widget">
       <h1>Suggested keywords</h1>
