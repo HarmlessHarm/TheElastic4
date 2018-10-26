@@ -15,7 +15,7 @@
   {% if results != None %}
 	<div class="container">
 		<div class="row justify-content-center">
-			<div class="col-10">
+			<div class="col-10" id="main-panel">
 				<div id="timeline-data" data-timeline="{{ timeline }}"></div>
 					<h1>Timeline</h1>
 			      	<div id="timeline"></div>
@@ -76,7 +76,7 @@
   </div>
 
   <script>
-    PANEL_WIDTH = $("#details-panel").width()
+    PANEL_WIDTH = $("#main-panel").width()
     var openPopup = function() {
       $("#popup").show()
     }
@@ -101,17 +101,18 @@
   console.log(typeof(values))
 
   // A formatter for counts.
-  var formatCount = d3.format(",.0f");
+  var formatCount = d3.format("");
 
   var margin = {top: 20, right: 30, bottom: 30, left: 30},
-      width = PANEL_WIDTH/2 - margin.left - margin.right,
-      height = PANEL_WIDTH/4 - margin.top - margin.bottom;
+      width = PANEL_WIDTH - margin.left - margin.right,
+      height = PANEL_WIDTH/2 - margin.top - margin.bottom;
 
   var max = d3.max(values);
   var min = d3.min(values);
-  var x = d3.scale.linear()
+  /*var x = d3.scale.linear()
         .domain([min, max])
-        .range([0, width]);
+        .range([0, width]);*/
+  var x = d3.time.scale().domain([new Date(min), new Date(max)]).range([0, width])
 
   // Generate a histogram using twenty uniformly-spaced bins.
   var data = d3.layout.histogram()
@@ -160,7 +161,11 @@
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+      .call(xAxis)
+      .call(function() {$('g text').each(function() {
+          var text = $(this).text();
+          $(this).text(text.replace('.', '2')); 
+      });});
 
   </script>
 
