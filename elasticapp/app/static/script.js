@@ -21,19 +21,19 @@ $(document).ready(function() {
   	var timeline = new vis.Timeline(container, items, options);
 })
 
-
 // Wordcloud
 $(document).ready(function(){
   $('.stat-link').click(function(){
-
     var text = $(this).attr('href')
     var qId = text.replace('#statistics-', '')
     var wordcloud_text = wordcloud_data
     var wordcloud_div_id = $(this).parents('.card').find(text).find(".wordcloud-data").attr("data-id")
-    drawWordCloud(wordcloud_text[qId].join(' '), wordcloud_div_id)
+    console.log(wordcloud_div_id)
+    if (!document.getElementById(wordcloud_div_id.slice(1)).hasChildNodes()) {
+      drawWordCloud(wordcloud_text[qId].join(' '), wordcloud_div_id)
+    }
   })
 })
-
 
 function drawWordCloud(text_string,location){
   var common = "\\";
@@ -53,7 +53,6 @@ function drawWordCloud(text_string,location){
       }
     })
   }
-  
   var svg_location = location;
   var width = 500;
   var height = width;
