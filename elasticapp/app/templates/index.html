@@ -87,8 +87,48 @@
 	</div>
   <br>
   {% endfor %}
-  <div class="pagination"><a href=""></a></div>
+  <nav aria-label="Page navigation example">
+      <ul class="pagination pagination-sm" id="pagination">
+      </ul>
+    </nav>
 </div>
+
+<script>
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return decodeURI(results[1]) || 0;
+    }
+}
+
+var pages = Math.ceil(0+{{data.count}}/25);
+var newp,newpp,newnp;
+var current_p = $.urlParam('p');
+current_p = current_p == null ? 1 : current_p;
+var current_s = $.urlParam('search');
+newpp = $('<li class="page-item"><a class="page-link" href="?search='+current_s+'&p='+(current_p-1)+'">Previous</a></li>');
+if(current_p == 1)
+        newpp.addClass('disabled');
+newnp = $('<li class="page-item"><a class="page-link" href="?search='+current_s+'&p='+(current_p+1)+'">Next</a></li>');
+    if(current_p == pages)
+        newpp.addClass('disabled');
+
+$("#pagination").append(newpp);
+
+for(x = 1; x <= pages; x++) {
+    
+    newp = $('<li class="page-item"><a class="page-link" href="?search='+current_s+'&p='+x+'">'+x+'</a></li>');
+    if(x == current_p)
+        newp.addClass('active');
+
+    $("#pagination").append(newp);
+}
+
+$("#pagination").append(newnp);
+</script>
 
 <!-- WORD CLOUD -->
 {% endif %}
