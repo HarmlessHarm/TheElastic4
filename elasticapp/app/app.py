@@ -25,13 +25,13 @@ def search_question():
 	wordcloud = make_wordcloud(questions)
 	data = {
 		'results': questions,
-		'search_term': query,
+		# 'search_term': query,
 		'timeline': timeline,
 		'wordcloud': wordcloud,
 		'count': count,
 		'range': '{} - {}'.format(str(page * 25 + 1), str(page * 25 + 25))
 	}
-	return render_template('index.html', data=data)
+	return render_template('index.html', data=data, search_term=query)
 
 def make_timeline(results):
 	dates = []

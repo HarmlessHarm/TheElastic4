@@ -9,11 +9,12 @@
 	var wordcloud_data = {{ data.wordcloud|tojson }};
 </script>
 {% endif %}
+
 <nav class="navbar navbar-light bg-light material">
-		<!-- <a class="navbar-brand">The Elastic 4</a> -->
-		<form class="form-inline" action="/search">
-  		<input class="form-control" type="search" placeholder="Search" name="search" value="{{ data.search_term }}"aria-label="Search">
-		</form>
+    <!-- <a class="navbar-brand">The Elastic 4</a> -->
+    <form class="form-inline" action="/search">
+      <input class="form-control" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
+    </form>
 </nav>
 
 {% if data is defined %}

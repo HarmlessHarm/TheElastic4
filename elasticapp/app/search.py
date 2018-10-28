@@ -87,9 +87,12 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 					'query_string': {
 						"fields": [ "question.dutch_analyzed^10", "description.dutch_analyzed" ],
 						'query': query
-					}
-				}
-			}
+					},
+				},
+			},
+		},
+		'aggregations': {
+			
 		}
 	}
 
