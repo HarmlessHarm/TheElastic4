@@ -1,7 +1,9 @@
 from elasticsearch import Elasticsearch
+from elasticsearch.exceptions import RequestError
 from elasticsearch_dsl import Search
 from elasticsearch_dsl.connections import connections
 from typing import List
+import pprint
 
 from elasticapp.constants import *
 
@@ -74,13 +76,13 @@ class UserResult(object):
 
 def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	client = Elasticsearch()
-	increment = 25
+	# increment = 25
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
 
 	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
 	query_dict = {
-		'from': page * increment,
+		'from': page * 10,
 		'query': {
 			'bool': {
 				'must': {
@@ -92,41 +94,19 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 			},
 		},
 		'aggregations': {
-			
+			'category': {
+				'terms': {'field': 'category'}
+			}
 		}
 	}
 
 	search = s.from_dict(query_dict)
 	count = search.count()
-	strt = int(page)
-	end = int(page) + increment
-	docs = search[strt:end].execute()
+
+	docs = search.execute()
 
 	return (count, [QuestionResult.from_doc(d) for d in docs])
 
-def getAdvanced(query) -> List[QuestionResult]:
-
-	client = Elasticsearch()
-	client.transport.connection_pool.connection.headers.update(HEADERS)
-	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
-
-	query_dict = {
-		'query': {
-			'bool': {
-				'must': {
-					'query_string': {
-						"fields": [ "question.dutch_analyzed^10", "description.dutch_analyzed" ],
-						'query': query
-					}
-				}
-			}
-		}
-	}
-	search = s.from_dict(query_dict)
-	print("length!!", search.count())
-	docs = search[:50].execute()
-
-	return [QuestionResult.from_doc(d) for d in docs]
 
 def getAnswers(questionId) -> List[AnswerResult]:
 	client = Elasticsearch()
@@ -135,14 +115,26 @@ def getAnswers(questionId) -> List[AnswerResult]:
 
 	s = Search(using=client, index=A_INDEX, doc_type=A_DOC_T)
 
-	a_query = {
-		'term': {
-			'questionId': questionId
+	query_dict = {
+		'query': {
+			'term': {
+				'questionId': questionId
+			},
+		},
+		'aggregations': {
+			'key_words': {
+				'significant_terms': {
+					'field': 'answer.keyword',
+				}
+			}
 		}
 	}
 
-	docs = s.query(a_query).execute()
-	
+	search = s.from_dict(query_dict)
+
+	docs = s.execute()
+	pprint.pprint(docs.aggregations.to_dict())
+
 	return [AnswerResult.from_doc(d) for d in docs]
 
 
@@ -164,4 +156,3 @@ def getUser(userId) -> UserResult:
 	if len(docs) > 0:
 		return UserResult.from_doc(docs[0])
 	return False
-		

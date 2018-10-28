@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from elasticapp.app.search import getQuestions, getAnswers, getAdvanced
+from elasticapp.app.search import getQuestions, getAnswers
 from collections import Counter
 
 app = Flask(__name__)
@@ -25,7 +25,6 @@ def search_question():
 	wordcloud = make_wordcloud(questions)
 	data = {
 		'results': questions,
-		# 'search_term': query,
 		'timeline': timeline,
 		'wordcloud': wordcloud,
 		'count': count,
