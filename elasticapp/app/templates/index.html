@@ -7,7 +7,7 @@
 <nav class="navbar navbar-light bg-light material">
 		<!-- <a class="navbar-brand">The Elastic 4</a> -->
 		<form class="form-inline" action="/search">
-  		<input class="form-control" type="search" placeholder="Search" name="search" value="" aria-label="Search">
+			<input class="form-control" type="search" placeholder="Search" name="search" value="" aria-label="Search">
 		</form>
 </nav>
 {% else %}
@@ -18,81 +18,80 @@
 {% endif %}
 
 <nav class="navbar navbar-light bg-light material">
-  <!-- <a class="navbar-brand">The Elastic 4</a> -->
-  <form class="form-inline" action="/search">
-    <input class="form-control" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
-  </form>
+	<!-- <a class="navbar-brand">The Elastic 4</a> -->
+	<form class="form-inline" action="/search">
+		<input class="form-control" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
+	</form>
 </nav>
 
 
 {% if data.results != None %}
 <div id="timeline-wrapper" class="container">
 	<h1>Timeline</h1>
-  	<div id="timeline"></div>
+		<div id="timeline"></div>
 </div>
 <div class="container search-results">
 	<span class="text-center">Showing results {{ data.range }} from {{ data.count }}</span>
 	{% for q in data.results %}
 	<div class="row justify-content-center">
-    <div class="card text-center material">
-      <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#question-{{q.questionId}}">Question</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#answers-{{q.questionId}}">Answers</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link stat-link" data-toggle="tab" href="#statistics-{{q.questionId}}">Statistics</a>
-          </li>
-        </ul>
-      </div>
-      <div class="card-body tab-content">
-        <div class="tab-pane question-pane fade show active" id="question-{{q.questionId}}" role="tabpanel">
-          <h5 class="card-title">{{q.question}}</h5>
-          <p class="card-text">{{q.description}}</p>
-			  	<p class="card-text"><small class="text-muted">By user nr. {{ q.user.userId }} on {{q.date}}</small></p>
-        </div>
-        <div class="tab-pane answer-pane fade" id="answers-{{q.questionId}}" role="tabpanel">
-          <h5 class="card-title">Answers</h5>
-			  	{% if q.answers|length != 0 %}
-			  		<ul class="list-group list-group-flush">
-			  		{% for a in q.answers %}
-			  			<li class="list-group-item">
-			  				<p class="card-text">{{a.answer}}</p>
-			  				<p class="card-text"><small class="text-muted">By user nr. {{ a.user.userId }} on {{a.date}}</small></p>
-			  				<span class="badge badge-success">+{{ a.thumbsUp }}</span>
-			  				<span class="badge badge-danger">-{{ a.thumbsDown }}</span>
-		  	  		</li>
-			  		{% endfor %}
-		  			</ul>
-			  	{% else %}
-			  		<p class="card-text">Geen antwoorden gevonden</p>
-			  	{% endif %}
-        </div>
-        <div class="tab-pane fade statistics-pane" id="statistics-{{q.questionId}}" role="tabpanel">
-          <h5 class="card-title">Statistics</h5>
-		  		{% if q.answers|length != 0 %}
+		<div class="card text-center material">
+			<div class="card-header">
+				<ul class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#question-{{q.questionId}}">Question</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#answers-{{q.questionId}}">Answers</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link stat-link" data-toggle="tab" href="#statistics-{{q.questionId}}">Statistics</a>
+					</li>
+				</ul>
+			</div>
+			<div class="card-body tab-content">
+				<div class="tab-pane question-pane fade show active" id="question-{{q.questionId}}" role="tabpanel">
+					<h5 class="card-title">{{q.question}}</h5>
+					<p class="card-text">{{q.description}}</p>
+					<p class="card-text"><small class="text-muted">By user nr. {{ q.user.userId }} on {{q.date}}</small></p>
+				</div>
+				<div class="tab-pane answer-pane fade" id="answers-{{q.questionId}}" role="tabpanel">
+					<h5 class="card-title">Answers</h5>
+					{% if q.answers|length != 0 %}
+						<ul class="list-group list-group-flush">
+						{% for a in q.answers %}
+							<li class="list-group-item">
+								<p class="card-text">{{a.answer}}</p>
+								<p class="card-text"><small class="text-muted">By user nr. {{ a.user.userId }} on {{a.date}}</small></p>
+								<span class="badge badge-success">+{{ a.thumbsUp }}</span>
+								<span class="badge badge-danger">-{{ a.thumbsDown }}</span>
+							</li>
+						{% endfor %}
+						</ul>
+					{% else %}
+						<p class="card-text">Geen antwoorden gevonden</p>
+					{% endif %}
+				</div>
+				<div class="tab-pane fade statistics-pane" id="statistics-{{q.questionId}}" role="tabpanel">
+					<h5 class="card-title">Statistics</h5>
+					{% if q.answers|length != 0 %}
 							<div class="widget">
-			  			<div class="wordcloud-data" data-id="#chart-{{q.questionId}}">
-	      				<div id="chart-{{q.questionId}}"></div>
-		  				</div>
+							<div class="wordcloud-data" data-id="#chart-{{q.questionId}}">
+								<div id="chart-{{q.questionId}}"></div>
+							</div>
 						</div>
 					{% else %}
-		 				<p class="card-text">Geen antwoorden gevonden</p>
+						<p class="card-text">Geen antwoorden gevonden</p>
 					{% endif %}
-        </div>
-     	</div>
-    </div>
+				</div>
+			</div>
+		</div>
 	</div>
-  <br>
-  {% endfor %}
-  <div class="pagination"><a href=""></a></div>
+	<br>
+	{% endfor %}
+	<div class="pagination"><a href=""></a></div>
 </div>
 
 <!-- WORD CLOUD -->
-{% endif %}
 {% endif %}
 
 {% endblock %}

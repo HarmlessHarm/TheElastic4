@@ -100,10 +100,12 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 		}
 	}
 
-	search = s.from_dict(query_dict)
-	count = search.count()
-
-	docs = search.execute()
+	try:
+		search = s.from_dict(query_dict)
+		count = search.count()
+		docs = search.execute()
+	except RequestError as e:
+		raise e
 
 	return (count, [QuestionResult.from_doc(d) for d in docs])
 

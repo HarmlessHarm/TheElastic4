@@ -14,8 +14,9 @@ def index():
 
 @app.route('/search', methods=['GET','POST'])
 def search_question():
-	operators = ['AND', 'OR', 'NOT']
+
 	query = request.args.get('search')
+	category = request.args.get('cat')
 	page = request.args.get('p')
 	if not page:
 		page = 1
@@ -39,7 +40,7 @@ def make_timeline(results):
 	for r in results:
 		date = r.date[0:10]
 		dates.append(date)
-
+		
 	# timeline = Counter(dates)
 
 	return dates
