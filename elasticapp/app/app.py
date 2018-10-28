@@ -31,8 +31,8 @@ def search_question():
 		'timeline': timeline,
 		'wordcloud': wordcloud,
 		'count': count,
+		'range': '{} - {}'.format(str(page * 10 + 1), str(min(count,page * 10 + 10))),
 		'categories': categories,
-		'range': '{} - {}'.format(str(page * 10 + 1), str(page * 10 + 10))
 	}
 	return render_template('index.html', data=data, search_term=query)
 

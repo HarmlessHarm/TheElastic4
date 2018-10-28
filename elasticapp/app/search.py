@@ -4,6 +4,7 @@ from elasticsearch_dsl import Search
 from elasticsearch_dsl.connections import connections
 from typing import List
 import pprint
+import re
 
 from elasticapp.constants import *
 
@@ -18,8 +19,8 @@ class QuestionResult(object):
 		self.date = date.strip('\"')
 		self.user = getUser(userId)
 		self.categoryId = categoryId
-		self.question = question
-		self.description = description
+		self.question = parseText(question)
+		self.description = parseText(description)
 		self.answers = getAnswers(questionId)
 
 	def from_doc(doc) -> 'QuestionResult':
@@ -35,7 +36,7 @@ class QuestionResult(object):
 class AnswerResult(object):
 	"""docstring for QuestionResult"""
 	def __init__(self, answerId, date, answer, userId, questionId, thumbsUp, thumbsDown, isBestAnswer):
-		self.answer = answer
+		self.answer = parseText(answer)
 		self.answerId = answerId
 		self.date = date.strip('\"')
 		self.user = getUser(userId)
@@ -161,6 +162,11 @@ def getUser(userId) -> UserResult:
 	if len(docs) > 0:
 		return UserResult.from_doc(docs[0])
 	return False
+
+
+def parseText(string):
+	string = string.replace("\\", "")
+	return string
 
 def getCategory(categoryId):
 	client = Elasticsearch()
