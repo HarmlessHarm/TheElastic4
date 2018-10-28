@@ -29,13 +29,13 @@
 <nav class="navbar navbar-light bg-light material">
         <!-- <a class="navbar-brand">The Elastic 4</a> -->
         <form class="form-inline col-8" action="/search">
-            <input class="form-control" type="search" placeholder="Search" name="search" value="{{search_term}}">&nbsp;
+            <input class="form-control" type="search" placeholder="Search" name="search" value="{{search_terms.query}}">&nbsp;
             <input type="submit" class="btn btn-primary" name="submit" value="Search" />&nbsp;
             <a class='pull-right' data-toggle="collapse" href="#advancedForm">Advanced search</a>
             <div class='collapse' id='advancedForm'>
-                <input class="form-control" type="text" placeholder="Title" name="question" value="">
-                <input class="form-control" type="text" placeholder="Description" name="description" value="">
-                <input class="form-control" type="text" placeholder="Year" name="year" value="">
+                <input class="form-control" type="text" placeholder="Title" name="question" value="{{search_terms.question}}">
+                <input class="form-control" type="text" placeholder="Description" name="description" value="{{search_terms.descripion}}">
+                <input class="form-control" type="text" placeholder="Year" name="year" value="{{search_terms.year}}">
                 <select class="form-control" name="category">
                     <option value="">Category</option>
                 </select>
@@ -47,15 +47,18 @@
 
 {% if data.results != None %}
 <div id="timeline-wrapper" class="container">
-	<h1>Timeline</h1>
+    <br>
+	<h4>Timeline</h4>
 		<div id="timeline"></div>
 </div>
+<hr>
 <div class="container">
 	<h4>Categories</h4>
 	{% for cat, count in data.categories.items() %}
 	<span class="badge badge-secondary category">{{cat}} {{count}}</span>
 	{% endfor %}
 </div>
+<hr>
 <div class="container search-results">
 	<span class="text-center">Showing results {{ data.range }} from {{ data.count }}</span>
 	{% for q in data.results %}
