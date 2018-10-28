@@ -3,13 +3,6 @@
 {% block content %}
 
 	<!--  Bootstrap navigation bar -->
-{% if data is defined %}
-<script type="text/javascript">
-	var timeline_data = {{ data.timeline|tojson }};
-	var wordcloud_data = {{ data.wordcloud|tojson }};
-</script>
-{% endif %}
-
 {% if data is not defined %}
 <nav class="navbar navbar-light bg-light material">
 		<!-- <a class="navbar-brand">The Elastic 4</a> -->
@@ -18,6 +11,11 @@
 		</form>
 </nav>
 {% else %}
+<script type="text/javascript">
+	var timeline_data = {{ data.timeline|tojson }};
+	var wordcloud_data = {{ data.wordcloud|tojson }};
+</script>
+
 <nav class="navbar navbar-light bg-light material">
 		<!-- <a class="navbar-brand">The Elastic 4</a> -->
 		<form class="form-inline" action="/search">
