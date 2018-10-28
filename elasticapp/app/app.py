@@ -21,7 +21,7 @@ def search_question():
 	if not page:
 		page = 1
 	page = int(page) - 1
-	(count, questions) = getQuestions(query, page)
+	(count, questions, categories) = getQuestions(query, page)
 	timeline = make_timeline(questions)
 	wordcloud = make_wordcloud(questions)
 	data = {
@@ -29,6 +29,7 @@ def search_question():
 		'timeline': timeline,
 		'wordcloud': wordcloud,
 		'count': count,
+		'categories': categories,
 		'range': '{} - {}'.format(str(page * 10 + 1), str(page * 10 + 10))
 	}
 	return render_template('index.html', data=data, search_term=query)
@@ -51,7 +52,5 @@ def make_wordcloud(results):
 		answers[r.questionId] = []
 		for a in r.answers:
 			answers[r.questionId].append(a.answer)
-	# print(answers)
-
 
 	return answers
