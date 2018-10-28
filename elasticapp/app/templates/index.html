@@ -6,8 +6,18 @@
 {% if data is not defined %}
 <nav class="navbar navbar-light bg-light material">
 		<!-- <a class="navbar-brand">The Elastic 4</a> -->
-		<form class="form-inline" action="/search">
-			<input class="form-control" type="search" placeholder="Search" name="search" value="" aria-label="Search">
+		<form class="form-inline col-8" action="/search">
+			<input class="form-control" type="search" placeholder="Search" name="search" value="">&nbsp;
+            <input type="submit" class="btn btn-primary" name="submit" value="Search" />&nbsp;
+            <a class='pull-right' data-toggle="collapse" href="#advancedForm">Advanced search</a>
+            <div class='collapse' id="advancedForm">
+                <input class="form-control" type="text" placeholder="Title" name="question" value="">
+                <input class="form-control" type="text" placeholder="Description" name="description" value="">
+                <input class="form-control" type="text" placeholder="Year" name="year" value="">
+                <select class="form-control" name="category">
+                    <option value="">Category</option>
+                </select>
+            </div>
 		</form>
 </nav>
 {% else %}
@@ -17,10 +27,20 @@
 </script>
 
 <nav class="navbar navbar-light bg-light material">
-	<!-- <a class="navbar-brand">The Elastic 4</a> -->
-	<form class="form-inline" action="/search">
-		<input class="form-control" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
-	</form>
+        <!-- <a class="navbar-brand">The Elastic 4</a> -->
+        <form class="form-inline col-8" action="/search">
+            <input class="form-control" type="search" placeholder="Search" name="search" value="{{search_term}}">&nbsp;
+            <input type="submit" class="btn btn-primary" name="submit" value="Search" />&nbsp;
+            <a class='pull-right' data-toggle="collapse" href="#advancedForm">Advanced search</a>
+            <div class='collapse' id='advancedForm'>
+                <input class="form-control" type="text" placeholder="Title" name="question" value="">
+                <input class="form-control" type="text" placeholder="Description" name="description" value="">
+                <input class="form-control" type="text" placeholder="Year" name="year" value="">
+                <select class="form-control" name="category">
+                    <option value="">Category</option>
+                </select>
+            </div>
+        </form>
 </nav>
 {% endif %}
 
@@ -101,25 +121,32 @@
 </div>
 
 <script>
-$.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-       return null;
-    }
-    else{
-       return decodeURI(results[1]) || 0;
-    }
-}
+var query = location.search.substr(1);
+var params = {};
+query.split("&").forEach(function(part) {
+var item = part.split("=");
+params[item[0]] = decodeURIComponent(item[1]);
+});
 
-var pages = Math.ceil(0+{{data.count}}/25);
+var pages = Math.ceil(0+{{data.count}}/10);
 var newp,newpp,newnp;
-var current_p = $.urlParam('p');
-current_p = current_p == null ? 1 : current_p;
-var current_s = $.urlParam('search');
-newpp = $('<li class="page-item"><a class="page-link" href="?search='+current_s+'&p='+(current_p-1)+'">Previous</a></li>');
+var current_p = params['p'];
+current_p = current_p == null ? 1 : parseInt(current_p);
+var current_s = params['search'];
+
+var paramswithoutp = params;
+delete paramswithoutp.p
+
+var qstr = "" 
+for(k in paramswithoutp) {
+    qstr += "&" + k + "=" + paramswithoutp[k]
+}
+qstr =  "?" + qstr.substr(1)
+qstr += "&p="
+newpp = $('<li class="page-item"><a class="page-link" href="'+qstr+(current_p-1)+'">Previous</a></li>');
 if(current_p == 1)
         newpp.addClass('disabled');
-newnp = $('<li class="page-item"><a class="page-link" href="?search='+current_s+'&p='+(current_p+1)+'">Next</a></li>');
+newnp = $('<li class="page-item"><a class="page-link" href="'+qstr+(current_p+1)+'">Next</a></li>');
     if(current_p == pages)
         newpp.addClass('disabled');
 
@@ -127,7 +154,7 @@ $("#pagination").append(newpp);
 
 for(x = 1; x <= pages; x++) {
     
-    newp = $('<li class="page-item"><a class="page-link" href="?search='+current_s+'&p='+x+'">'+x+'</a></li>');
+    newp = $('<li class="page-item"><a class="page-link" href="'+qstr+x+'">'+x+'</a></li>');
     if(x == current_p)
         newp.addClass('active');
 
@@ -137,9 +164,11 @@ for(x = 1; x <= pages; x++) {
 $("#pagination").append(newnp);
 
 $(".card-text").each(function() {
-    var keywords = current_s.split(" ")
+    var keywords = current_s.split("+")
     var html = $(this).html()
     for(var i in keywords) {
+        if(keywords[i] in ['AND','OR','NOT'])
+            continue;
         html = html.replace(keywords[i], "<strong>"+keywords[i]+"</strong>")
     }
     $(this).html(html)
