@@ -45,7 +45,7 @@
 {% endif %}
 
 
-{% if data.results != None %}
+{% if data is defined and data.results != None %}
 <div id="timeline-wrapper" class="container">
     <br>
 	<h4>Timeline</h4>
