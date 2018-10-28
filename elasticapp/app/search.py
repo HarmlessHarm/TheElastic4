@@ -119,7 +119,7 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	docs = search.execute()
 	categories = [{getCategory(bucket['key']): bucket['doc_count']} for bucket in docs.aggregations.category.buckets]
 
-	pprint.pprint(categories)
+	# pprint.pprint(categories)
 	return (count, [QuestionResult.from_doc(d) for d in docs], categories)
 
 
@@ -129,26 +129,16 @@ def getAnswers(questionId) -> List[AnswerResult]:
 	client.transport.connection_pool.connection.headers.update(HEADERS)
 
 	s = Search(using=client, index=A_INDEX, doc_type=A_DOC_T)
-
+	print(questionId)
 	query_dict = {
-		'query': {
-			'term': {
-				'questionId': questionId
-			},
-		},
-		'aggregations': {
-			'key_words': {
-				'significant_terms': {
-					'field': 'answer.keyword',
-				}
+		'term': {
+			'questionId': {
+				'value':questionId
 			}
-		}
+		},
 	}
 
-	search = s.from_dict(query_dict)
-
-	docs = s.execute()
-	# pprint.pprint(docs.aggregations.to_dict())
+	docs = s.query(query_dict).execute()
 
 	return [AnswerResult.from_doc(d) for d in docs]
 
