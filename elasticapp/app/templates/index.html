@@ -3,88 +3,80 @@
 {% block content %}
 
 	<!--  Bootstrap navigation bar -->
-	<div>{{ data }}</div>
-	<nav class="navbar navbar-light bg-light">
-  		<a class="navbar-brand">The Elastic 4</a>
-  		<form class="form-inline" action="/search">
-    		<input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
-    		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-  		</form>
-	</nav>
+<div>{{ data }}</div>
+<nav class="navbar navbar-light bg-light material">
+		<!-- <a class="navbar-brand">The Elastic 4</a> -->
+		<form class="form-inline" action="/search">
+  		<input class="form-control" type="search" placeholder="Search" name="search" value="{{ search_term }}"aria-label="Search">
+		</form>
+</nav>
 
-  {% if results != None %}
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-10" id="main-panel">
-				<div id="timeline-data" data-timeline="{{ timeline }}"></div>
-					<h1>Timeline</h1>
-			      	<div id="timeline"></div>
-			    </div>
-			</div>
-		</div>
-	  	<div class="row justify-content-center">
-			<div class="col-8">
-	  			<div class="search">
-	  				Showing results for <span>{{ search_term }}</span>
-	  			</div>
-	  			<div class="search-results">
-	      		{% for q in results %}
-
-            <div class="card text-center">
-              <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                  <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#question-{{q.questionId}}">Question</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#answers-{{q.questionId}}">Answers</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link stat-link" data-toggle="tab" href="#statistics-{{q.questionId}}">Statistics</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="card-body tab-content">
-                <div class="tab-pane fade show active" id="question-{{q.questionId}}" role="tabpanel">
-                  <h5 class="card-title">{{q.question}}</h5>
-                  <p class="card-text">{{q.description}}</p>
-				  <p class="card-text"><small class="text-muted">{{q.date[1:-1]}}</small></p>
-                </div>
-                <div class="tab-pane fade" id="answers-{{q.questionId}}" role="tabpanel">
-                  <h5 class="card-title">Answers</h5>
-				  {% if q.answers|length != 0 %}
-				  <ul class="list-group list-group-flush">
-				  {% for a in q.answers %}
-				  <li class="list-group-item">
-				  <p class="card-text">{{a.answer}}</p>
-			  	  </li>
-				  {% endfor %}
-				  {% else %}
-				  <p class="card-text">Geen antwoorden gevonden</p>
-				  {% endif %}
-
-			  </ul>
-                </div>
-                <div class="tab-pane fade statistics" id="statistics-{{q.questionId}}" role="tabpanel">
-                  <h5 class="card-title">Statistics</h5>
-				  {% if q.answers|length != 0 %}
-	 					<div class="widget">
-					  <div class="wordcloud-data" data-wordcloud="{{ wordcloud[q.questionId] }}" data-id="#chart-{{q.questionId}}">
-				      <div id="chart-{{q.questionId}}"></div>
-				  	</div>
-					</div>
-					{% else %}
-				 <p class="card-text">Geen antwoorden gevonden</p>
-				{% endif %}
-                </div>
-
-              </div>
-            </div><br>
-	      		{% endfor %}
-	  			</div>
-			</div>
-		</div>
+{% if results != None %}
+<!-- <div id="timeline-wrapper" class="container" data-timeline="{{ timeline }}">
+	<h1>Timeline</h1>
+  	<div id="timeline"></div>
+</div> -->
+<div class="container search-results">
+	<div class="row justify-content-center">
+		<span>Showing results for <span>{{ search_term }}</span></span>
 	</div>
+	{% for q in results %}
+	<div class="row justify-content-center">
+    <div class="card text-center material">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#question-{{q.questionId}}">Question</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#answers-{{q.questionId}}">Answers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link stat-link" data-toggle="tab" href="#statistics-{{q.questionId}}">Statistics</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body tab-content">
+        <div class="tab-pane question-pane fade show active" id="question-{{q.questionId}}" role="tabpanel">
+          <h5 class="card-title">{{q.question}}</h5>
+          <p class="card-text">{{q.description}}</p>
+			  	<p class="card-text"><small class="text-muted">By user nr. {{ q.user.userId }} on {{q.date[1:-1]}}</small></p>
+        </div>
+        <div class="tab-pane answer-pane fade" id="answers-{{q.questionId}}" role="tabpanel">
+          <h5 class="card-title">Answers</h5>
+			  	{% if q.answers|length != 0 %}
+			  		<ul class="list-group list-group-flush">
+			  		{% for a in q.answers %}
+			  			<li class="list-group-item">
+			  				<p class="card-text">{{a.answer}}</p>
+			  				<p class="card-text"><small class="text-muted">By user nr. {{ a.user.userId }} on {{a.date}}</small></p>
+			  				<span class="badge badge-success">+{{ a.thumbsUp }}</span>
+			  				<span class="badge badge-danger">-{{ a.thumbsDown }}</span>
+		  	  		</li>
+			  		{% endfor %}
+		  			</ul>
+			  	{% else %}
+			  		<p class="card-text">Geen antwoorden gevonden</p>
+			  	{% endif %}
+        </div>
+        <div class="tab-pane fade statistics-pane" id="statistics-{{q.questionId}}" role="tabpanel">
+          <h5 class="card-title">Statistics</h5>
+		  		{% if q.answers|length != 0 %}
+							<div class="widget">
+			  			<div class="wordcloud-data" data-wordcloud="{{ wordcloud[q.questionId] }}" data-id="#chart-{{q.questionId}}">
+	      				<div id="chart-{{q.questionId}}"></div>
+		  				</div>
+						</div>
+					{% else %}
+		 				<p class="card-text">Geen antwoorden gevonden</p>
+					{% endif %}
+        </div>
+     	</div>
+    </div>
+	</div>
+  <br>
+  {% endfor %}
+</div>
 
 <div id="chart"></div>
   <script>
@@ -107,10 +99,10 @@
 
   // Generate a 1000 data points using normal distribution with mean=20, deviation=5
   // var values = d3.range(1000).map(d3.random.normal(20, 5));
-  var values = $('#timeline-data').attr('data-timeline')
+  var values = $('#timeline-wrapper').attr('data-timeline')
   values = JSON.parse(values)
   // values = values.map(Number)
-  console.log(typeof(values))
+  // console.log(values)
 
   // A formatter for counts.
   var formatCount = d3.format("");
@@ -163,6 +155,7 @@
       .attr("height", function(d) { return height - y(d.y); })
       .attr("fill", function(d) { return colorScale(d.y) });
 
+  console.log(data)
   bar.append("text")
       .attr("dy", ".75em")
       .attr("y", -12)

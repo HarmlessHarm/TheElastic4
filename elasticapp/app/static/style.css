@@ -1,142 +1,48 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-body {
-    font-family: 'Roboto', sans-serif;
-    font-size:14px;
-    margin:0;
-    padding:0;
-    background:url('/static/stripes-light.png');
-    background-attachment: fixed;
+.material {
+    box-shadow: 0 0 5px -2px #000;
+    transition-property: height, width, top;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
 }
 
-.bulk-results {
-    width: 50%;
-    float:left;
+/* HEADER */
+
+.navbar {
+    height: 100px;
+    margin: auto;
 }
 
-.search-results > div {
-    border:1px solid #5b8bd3;
-    border-radius: 4px;
-    padding:8px 40px 20px 8px;
-    margin:8px;
-    color:#333;
-    background:#e0ebfc;
+.navbar .form-inline {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.search-results > div:hover {
-    cursor:pointer;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+.navbar .form-inline .form-control {
+    border-radius: 0;
+    border: solid 1px lightgray;
+    transition: box-shadow 0.5s ease;
 }
 
-.search-results > div > span:first-of-type {
-    font-weight:bold
+.navbar .form-inline .form-control:focus {
+    /*border: none;*/
+    box-shadow: 0 0 6px -2px gray;
 }
 
-.search-results > div > span:last-of-type {
-    color:#777;
-}
-
-.search-results > div:hover .q-btn {
-    visibility: visible;
-}
-
-.q-btn {
-    left:100%;
-    margin: -8px 0 -8px 0;
-    width:32px;
-    background: #5b8bd3;
-    position: relative;
-    font-size: 20px;
-    color:white;
-    padding: 4px;
-    text-align: center;
-    border-bottom-left-radius: 4px;
-    visibility: hidden;
-}
-
-.bulk-results, #details-panel {
-    margin-top:100px;
-}
-
-#search-bar {
-    position: fixed;
-    background: #009688;
+/* SEARCH RESULTS */
+.card {
     width: 100%;
-    margin: 0;
-    padding: 8px;
-    border-bottom:1px solid #888;
-    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.5);
-    text-align:center;
-    z-index:1000;
+    border-radius: 0;
 }
 
-#search-bar input {
-    padding:8px;
-    font-size:24px;
-    color:#888;
-    margin-right:0;
-    border-width: 2px 0 2px 2px;
-    border-style: solid;
-    border-color: #e0ebfc;
+.card-header .nav-link {
+    border-radius: 0;
 }
 
-#search-bar button {
-    padding:9px;
-    font-size:24px;
-    color:#00796B;
-    background:#B2DFDB;
-    margin-left:0;
-
+.card-body {
+    text-align: left;
 }
 
-button:hover {
-    cursor: pointer;
+.card-body .answer-pane li {
+    padding-left: 0;
 }
-
-#details-panel {
-    float:left;
-    width:50%;
-    text-align:center;
-    padding-top:10px;
-}
-
-.search {
-    text-align: center;
-}
-
-.search span {
-    font-weight: bold;
-    font-style: italic;
-}
-
-.widget {
-    max-width: 50%;
-    float:left;
-    font-size:10px;
-}
-
-#popup {
-    position:fixed;
-    width: calc(50vw - 48px);
-    left:50%;
-    top:124px;
-    height: calc(100vh - 172px);
-    border-radius:8px;
-    border:1px solid #ccc;
-    background:white;
-    padding:16px;
-    z-index:1000;
-    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.5);
-
-}
-
-#close {
-    color:#ccc;
-    font-size:24px;
-    margin: -8px;
-    position:absolute;
-}
-
-#close:hover {
-    color:#999;
-    cursor:pointer;

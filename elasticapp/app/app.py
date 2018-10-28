@@ -28,7 +28,7 @@ def make_timeline(results):
 
 	# Results moeten nog verder uitgepakt worden
 	for r in results:
-		date = int(r.date[1:5])
+		date = int(r.date[0:4])
 		dates.append(date)
 
 	# timeline = Counter(dates)
@@ -41,7 +41,7 @@ def make_wordcloud(results):
 		answers[r.questionId] = []
 		for a in r.answers:
 			answers[r.questionId].append(a.answer)
-	print(answers)
+	# print(answers)
 
 
 	return answers
