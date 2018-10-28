@@ -21,19 +21,19 @@ $(document).ready(function() {
   	var timeline = new vis.Timeline(container, items, options);
 })
 
-
 // Wordcloud
 $(document).ready(function(){
   $('.stat-link').click(function(){
-    console.log(this)
     var text = $(this).attr('href')
     var qId = text.replace('#statistics-', '')
     var wordcloud_text = wordcloud_data
     var wordcloud_div_id = $(this).parents('.card').find(text).find(".wordcloud-data").attr("data-id")
-    drawWordCloud(wordcloud_text[qId].join(' '), wordcloud_div_id)
+    console.log(wordcloud_div_id)
+    if (!document.getElementById(wordcloud_div_id.slice(1)).hasChildNodes()) {
+      drawWordCloud(wordcloud_text[qId].join(' '), wordcloud_div_id)
+    }
   })
 })
-
 
 function drawWordCloud(text_string,location){
   var common = "\\";
@@ -53,7 +53,6 @@ function drawWordCloud(text_string,location){
       }
     })
   }
-  console.log(d3)
   var svg_location = location;
   var width = 500;
   var height = width;
@@ -69,10 +68,6 @@ function drawWordCloud(text_string,location){
   ])
   .range([10,100]);
 
-  console.log(text_string)
-  console.log(location)
-  console.log(words)
-
   d3.layout.cloud().size([width, height])
   .timeInterval(20)
   .words(word_entries)
@@ -82,8 +77,6 @@ function drawWordCloud(text_string,location){
   .font("Impact")
   .on("end", draw)
   .start();
-
-  console.log("test3")
 
   function draw(words) {
     d3.select(svg_location).append("svg")
