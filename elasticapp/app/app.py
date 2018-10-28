@@ -16,19 +16,29 @@ def index():
 def search_question():
 	operators = ['AND', 'OR', 'NOT']
 	query = request.args.get('search')
-	if any(o in query for o in operators):
-		questions = getAdvanced(query)
-	questions = getQuestions(query)
+	page = request.args.get('p')
+	if not page:
+		page = 1
+	page = int(page) - 1
+	(count, questions) = getQuestions(query, page)
 	timeline = make_timeline(questions)
 	wordcloud = make_wordcloud(questions)
-	return render_template('index.html', results=questions,search_term=query,timeline=timeline,wordcloud=wordcloud)
+	data = {
+		'results': questions,
+		'search_term': query,
+		'timeline': timeline,
+		'wordcloud': wordcloud,
+		'count': count,
+		'range': '{} - {}'.format(str(page * 50 + 1), str(page * 50 + 50))
+	}
+	return render_template('index.html', data=data)
 
 def make_timeline(results):
 	dates = []
 
 	# Results moeten nog verder uitgepakt worden
 	for r in results:
-		date = int(r.date[0:4])
+		date = r.date[0:10]
 		dates.append(date)
 
 	# timeline = Counter(dates)

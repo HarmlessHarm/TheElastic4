@@ -29,6 +29,11 @@
     box-shadow: 0 0 6px -2px gray;
 }
 
+/* TIMELINE */
+.vis-item-content {
+    font-size: 10px;
+}
+
 /* SEARCH RESULTS */
 .card {
     width: 100%;

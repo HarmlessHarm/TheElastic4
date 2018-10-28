@@ -1,10 +1,13 @@
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
+from elasticsearch_dsl.connections import connections
 from typing import List
 
 from elasticapp.constants import *
 
 HEADERS = {'content-type': 'application/json'}
+
+connections.create_connection(hosts=['localhost'])
 
 class QuestionResult(object):
 	"""docstring for QuestionResult"""
@@ -69,29 +72,33 @@ class UserResult(object):
 				bestAnswers = doc.bestAnswers,
 			)
 
-def getQuestions(term:str) -> List[QuestionResult]:
+def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	client = Elasticsearch()
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
-	
-	fuzziness = 0
-	if len(term.split(' ')) > 1:
-		fuzziness = 'AUTO'
 
 	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
-	search = {
-		'multi_match': {
-			'query': term,
-			'type': 'best_fields',
-			"fields": [ "question.dutch_analyzed^3", "description.dutch_analyzed" ],
-			'tie_breaker': 0.7,
-			'fuzziness': fuzziness,
+	query_dict = {
+		'from': page * 50,
+		'query': {
+			'bool': {
+				'must': {
+					'query_string': {
+						"fields": [ "question.dutch_analyzed^10", "description.dutch_analyzed" ],
+						'query': query
+					}
+				}
+			}
 		}
 	}
 
-	docs = s.query(search)[:100].execute()
+	search = s.from_dict(query_dict)
+	count = search.count()
+	strt = int(page)
+	end = int(page) + 50
+	docs = search[strt:end].execute()
 
-	return [QuestionResult.from_doc(d) for d in docs]
+	return (count, [QuestionResult.from_doc(d) for d in docs])
 
 def getAdvanced(query) -> List[QuestionResult]:
 
@@ -99,19 +106,21 @@ def getAdvanced(query) -> List[QuestionResult]:
 	client.transport.connection_pool.connection.headers.update(HEADERS)
 	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
 
-	search = {
-		'query_string': {
-			'query': query,
-			'fields': ["question.dutch_analyzed^3", "description.dutch_analyzed" ],
-			'tie_breaker': 0,
-			'fuzziness': 0,
-
+	query_dict = {
+		'query': {
+			'bool': {
+				'must': {
+					'query_string': {
+						"fields": [ "question.dutch_analyzed^10", "description.dutch_analyzed" ],
+						'query': query
+					}
+				}
+			}
 		}
 	}
-
-	print("ADVANCED==================================")
-
-	docs = s.query(search)[:100].execute()
+	search = s.from_dict(query_dict)
+	print("length!!", search.count())
+	docs = search[:50].execute()
 
 	return [QuestionResult.from_doc(d) for d in docs]
 
@@ -148,7 +157,6 @@ def getUser(userId) -> UserResult:
 	}
 
 	docs = s.query(u_query).execute()
-	print(docs)
 	if len(docs) > 0:
 		return UserResult.from_doc(docs[0])
 	return False
