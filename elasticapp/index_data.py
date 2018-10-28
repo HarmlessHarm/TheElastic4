@@ -32,7 +32,10 @@ def main(test):
 									'analyzer': 'dutch'
 								}
 							}
-						}
+						},
+						'category': {
+							'type': 'keyword'
+						},
 					},
 				},
 			},
@@ -89,7 +92,7 @@ def questions_to_index(questions):
 	print("Indexing questions")
 	for i, q in enumerate(questions):
 
-		if i % int(len(questions)/50) == 0:
+		if i % int(len(questions) / 50) == 0:
 			print('.', end="", flush=True)
 		yield {
 			'_op_type': 'create',

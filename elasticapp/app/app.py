@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from elasticapp.app.search import getQuestions, getAnswers, getAdvanced
+from elasticapp.app.search import getQuestions, getAnswers
 from collections import Counter
 
 app = Flask(__name__)
@@ -14,8 +14,9 @@ def index():
 
 @app.route('/search', methods=['GET','POST'])
 def search_question():
-	operators = ['AND', 'OR', 'NOT']
+
 	query = request.args.get('search')
+	category = request.args.get('cat')
 	page = request.args.get('p')
 	if not page:
 		page = 1
@@ -25,13 +26,12 @@ def search_question():
 	wordcloud = make_wordcloud(questions)
 	data = {
 		'results': questions,
-		'search_term': query,
 		'timeline': timeline,
 		'wordcloud': wordcloud,
 		'count': count,
-		'range': '{} - {}'.format(str(page * 25 + 1), str(page * 25 + 25))
+		'range': '{} - {}'.format(str(page * 10 + 1), str(page * 10 + 10))
 	}
-	return render_template('index.html', data=data)
+	return render_template('index.html', data=data, search_term=query)
 
 def make_timeline(results):
 	dates = []
@@ -40,7 +40,7 @@ def make_timeline(results):
 	for r in results:
 		date = r.date[0:10]
 		dates.append(date)
-
+		
 	# timeline = Counter(dates)
 
 	return dates
