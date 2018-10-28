@@ -38,7 +38,6 @@ $(document).ready(function(){
 function drawWordCloud(text_string,location){
   var common = "\\";
   var word_count = {};
-  // console.log(text_string.split(/[ ]+/))
   var words = text_string.split(/[ '\-\(\)\*":;\[\]|{},.!?]+/);
   if (words.length == 1){
     word_count[words[0]] = 1;
@@ -54,7 +53,7 @@ function drawWordCloud(text_string,location){
       }
     })
   }
-
+  console.log(d3)
   var svg_location = location;
   var width = 500;
   var height = width;
