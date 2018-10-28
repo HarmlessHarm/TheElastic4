@@ -120,22 +120,21 @@ def getQuestions(query:str,page=0,q=None,d=None,y=None,c=None) -> List[QuestionR
 		}
 	}
 	
-	if q is not None:
+	if q is not '':
 		q_filter = {'match': {'question.dutch_analyzed':q}}
 		query_dict['post_filter']['bool']['must'].append(q_filter)
 	
-	if d is not None:
+	if d is not '':
 		d_filter = {'match': {'description.dutch_analyzed':d}}
 		query_dict['post_filter']['bool']['must'].append(d_filter)
 
-	if y is not None:
+	if y is not '':
 		y_filter = {'match': {'date':y}}
 		query_dict['post_filter']['bool']['must'].append(y_filter)
 	
-	if c is not None:
+	if c is not '':
 		c_filter = {'match': {'category':c}}
 		query_dict['post_filter']['bool']['must'].append(c_filter)
-
 
 	search = s.from_dict(query_dict)
 	count = search.count()

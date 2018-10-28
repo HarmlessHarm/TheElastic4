@@ -41,7 +41,14 @@ def search_question():
 		'range': '{} - {}'.format(str(page * 10 + 1), str(min(count,page * 10 + 10))),
 		'categories': categories,
 	}
-	return render_template('index.html', data=data, search_term=query)
+	search_terms = {
+		'query': query,
+		'question': q,
+		'description': d,
+		'year': y,
+		'category': c,
+	}
+	return render_template('index.html', data=data, search_terms=search_terms)
 
 def make_timeline(results):
 	dates = []
