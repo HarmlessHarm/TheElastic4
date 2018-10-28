@@ -5,7 +5,7 @@ Elastic Search assignment for the zoekmachines course at University of Amsterdam
 | Name  | Stud. Nr.  |
 |---|---|
 | Harm Manders  | 10677186  |
-| Kjeld Oostra  |   |
+| Kjeld Oostra  | 10748598  |
 | Sander Hansen | 10995080  |
 
 #### Assignment

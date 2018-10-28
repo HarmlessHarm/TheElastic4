@@ -3,6 +3,8 @@ from flask import Flask, render_template, request
 from elasticapp.app.search import getQuestions, getAnswers
 from collections import Counter
 
+import os
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -47,10 +49,14 @@ def make_timeline(results):
 	return dates
 
 def make_wordcloud(results):
+	parent_dir = os.path.dirname(os.path.abspath(__file__))
+	file_path = os.path.join(parent_dir, 'static/stopwords-nl.txt')
+	stop_words = open(file_path).read().split()
 	answers = {}
 	for r in results:
 		answers[r.questionId] = []
 		for a in r.answers:
-			answers[r.questionId].append(a.answer)
+			filtered = [word for word in a.answer.split(' ') if word not in stop_words]
+			answers[r.questionId].append(filtered)
 
 	return answers
