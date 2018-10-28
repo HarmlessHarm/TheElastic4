@@ -75,6 +75,20 @@ class UserResult(object):
 				bestAnswers = doc.bestAnswers,
 			)
 
+class CategoryResult(object):
+	"""docstring for UserResult"""
+	def __init__(self, categoryId, parentId, name):
+		self.categoryId = categoryId
+		self.parentId = parentId
+		self.name = name
+	
+	def from_doc(doc) -> 'CategoryResult':
+		return CategoryResult(
+				categoryId = doc.meta.id,
+				parentId = doc.parentId,
+				name = doc.name,
+			)
+
 def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	client = Elasticsearch()
 	# increment = 25
@@ -101,14 +115,13 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 		}
 	}
 
-	try:
-		search = s.from_dict(query_dict)
-		count = search.count()
-		docs = search.execute()
-	except RequestError as e:
-		raise e
+	search = s.from_dict(query_dict)
+	count = search.count()
+	docs = search.execute()
+	categories = [{getCategory(bucket['key']): bucket['doc_count']} for bucket in docs.aggregations.category.buckets]
 
-	return (count, [QuestionResult.from_doc(d) for d in docs])
+	# pprint.pprint(categories)
+	return (count, [QuestionResult.from_doc(d) for d in docs], categories)
 
 
 def getAnswers(questionId) -> List[AnswerResult]:
@@ -117,26 +130,16 @@ def getAnswers(questionId) -> List[AnswerResult]:
 	client.transport.connection_pool.connection.headers.update(HEADERS)
 
 	s = Search(using=client, index=A_INDEX, doc_type=A_DOC_T)
-
+	print(questionId)
 	query_dict = {
-		'query': {
-			'term': {
-				'questionId': questionId
-			},
-		},
-		'aggregations': {
-			'key_words': {
-				'significant_terms': {
-					'field': 'answer.keyword',
-				}
+		'term': {
+			'questionId': {
+				'value':questionId
 			}
-		}
+		},
 	}
 
-	search = s.from_dict(query_dict)
-
-	docs = s.execute()
-	pprint.pprint(docs.aggregations.to_dict())
+	docs = s.query(query_dict).execute()
 
 	return [AnswerResult.from_doc(d) for d in docs]
 
@@ -160,6 +163,26 @@ def getUser(userId) -> UserResult:
 		return UserResult.from_doc(docs[0])
 	return False
 
+
 def parseText(string):
 	string = string.replace("\\", "")
 	return string
+
+def getCategory(categoryId):
+	client = Elasticsearch()
+
+	client.transport.connection_pool.connection.headers.update(HEADERS)
+
+	s = Search(using=client, index=C_INDEX, doc_type=C_DOC_T)
+	c_query = {
+		'term': {
+			'_id': {
+				'value': categoryId
+			}
+		}
+	}
+
+	docs = s.query(c_query).execute()
+	if len(docs) > 0:
+		return CategoryResult.from_doc(docs[0]).name
+	return False
