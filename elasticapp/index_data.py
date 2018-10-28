@@ -36,6 +36,9 @@ def main(test):
 						'category': {
 							'type': 'keyword'
 						},
+						'date': {
+							'type': 'date'
+						}
 					},
 				},
 			},

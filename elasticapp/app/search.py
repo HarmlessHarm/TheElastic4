@@ -111,6 +111,10 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 		'aggregations': {
 			'category': {
 				'terms': {'field': 'category'}
+			},
+			'years': {
+				'field': 'date',
+				'interval': 'year',
 			}
 		}
 	}
@@ -118,7 +122,7 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	search = s.from_dict(query_dict)
 	count = search.count()
 	docs = search.execute()
-	categories = [{getCategory(bucket['key']): bucket['doc_count']} for bucket in docs.aggregations.category.buckets]
+	categories = {getCategory(bucket['key']): bucket['doc_count'] for bucket in docs.aggregations.category.buckets}
 
 	# pprint.pprint(categories)
 	return (count, [QuestionResult.from_doc(d) for d in docs], categories)

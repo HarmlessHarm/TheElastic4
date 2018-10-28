@@ -30,6 +30,12 @@
 	<h1>Timeline</h1>
 		<div id="timeline"></div>
 </div>
+<div class="container">
+	<h4>Categories</h4>
+	{% for cat, count in data.categories.items() %}
+	<span class="badge badge-secondary category">{{cat}} {{count}}</span>
+	{% endfor %}
+</div>
 <div class="container search-results">
 	<span class="text-center">Showing results {{ data.range }} from {{ data.count }}</span>
 	{% for q in data.results %}
