@@ -139,6 +139,7 @@ def getQuestions(query:str,page=0,q=None,d=None,y=None,c=None) -> List[QuestionR
 	search = s.from_dict(query_dict)
 	count = search.count()
 	docs = search.execute()
+	all_categories = getAllCategories()
 	categories = {getCategory(bucket['key']): bucket['doc_count'] for bucket in docs.aggregations.category.buckets}
 
 	# pprint.pprint(categories)
@@ -207,3 +208,12 @@ def getCategory(categoryId):
 	if len(docs) > 0:
 		return CategoryResult.from_doc(docs[0]).name
 	return False
+
+def getAllCategories():
+	client = Elasticsearch()
+	client.transport.connection_pool.connection.headers.update(HEADERS)
+
+	s = Search(using=client, index=C_INDEX, doc_type=C_DOC_T)
+	docs = s.execute()
+	print(docs)
+	
