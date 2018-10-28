@@ -88,8 +88,8 @@
 	</div>
   <br>
   {% endfor %}
-  <nav>
-      <ul class="pagination pagination-sm" id="pagination">
+    <nav>
+      <ul class="pagination pagination-sm flex-wrap" id="pagination">
       </ul>
     </nav>
 </div>
@@ -129,6 +129,16 @@ for(x = 1; x <= pages; x++) {
 }
 
 $("#pagination").append(newnp);
+
+$(".card-text").each(function() {
+    var keywords = current_s.split(" ")
+    var html = $(this).html()
+    for(var i in keywords) {
+        html = html.replace(keywords[i], "<strong>"+keywords[i]+"</strong>")
+    }
+    $(this).html(html)
+    
+});
 </script>
 
 <!-- WORD CLOUD -->
