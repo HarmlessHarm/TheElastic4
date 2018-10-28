@@ -36,9 +36,10 @@ def main(test):
 						'category': {
 							'type': 'keyword'
 						},
-						'date': {
-							'type': 'date'
-						}
+						# 'date': {
+						# 	'type': 'date',
+						# 	"format": "yyyy-MM-dd HH:mm:ss"
+						# }
 					},
 				},
 			},

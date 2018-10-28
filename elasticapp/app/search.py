@@ -89,7 +89,7 @@ class CategoryResult(object):
 				name = doc.name,
 			)
 
-def getQuestions(query:str,page:int) -> List[QuestionResult]:
+def getQuestions(query:str,page=0,q=None,d=None,y=None,c=None) -> List[QuestionResult]:
 	client = Elasticsearch()
 	# increment = 25
 
@@ -112,12 +112,30 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 			'category': {
 				'terms': {'field': 'category'}
 			},
-			'years': {
-				'field': 'date',
-				'interval': 'year',
+		},
+		'post_filter': {
+			'bool': {
+				'must': []
 			}
 		}
 	}
+	
+	if q is not None:
+		q_filter = {'match': {'question.dutch_analyzed':q}}
+		query_dict['post_filter']['bool']['must'].append(q_filter)
+	
+	if d is not None:
+		d_filter = {'match': {'description.dutch_analyzed':d}}
+		query_dict['post_filter']['bool']['must'].append(d_filter)
+
+	if y is not None:
+		y_filter = {'match': {'date':y}}
+		query_dict['post_filter']['bool']['must'].append(y_filter)
+	
+	if c is not None:
+		c_filter = {'match': {'category':c}}
+		query_dict['post_filter']['bool']['must'].append(c_filter)
+
 
 	search = s.from_dict(query_dict)
 	count = search.count()

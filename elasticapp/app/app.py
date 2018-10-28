@@ -18,12 +18,19 @@ def index():
 def search_question():
 
 	query = request.args.get('search')
-	category = request.args.get('cat')
+	
+	q = request.args.get('question')
+	d = request.args.get('description')
+	y = request.args.get('year')
+	c = request.args.get('category')
+
+	# print(category)
 	page = request.args.get('p')
+
 	if not page:
 		page = 1
 	page = int(page) - 1
-	(count, questions, categories) = getQuestions(query, page)
+	(count, questions, categories) = getQuestions(query, page, q,d,y,c)
 	timeline = make_timeline(questions)
 	wordcloud = make_wordcloud(questions)
 	data = {
