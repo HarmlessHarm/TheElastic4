@@ -14,9 +14,7 @@
                 <input class="form-control" type="text" placeholder="Title" name="question" value="">
                 <input class="form-control" type="text" placeholder="Description" name="description" value="">
                 <input class="form-control" type="text" placeholder="Year" name="year" value="">
-                <select class="form-control" name="category">
-                    <option value="">Category</option>
-                </select>
+                <input type="hidden" name="category" value="">
             </div>
 		</form>
 </nav>
@@ -36,9 +34,7 @@
                 <input class="form-control" type="text" placeholder="Title" name="question" value="{{search_terms.question}}">
                 <input class="form-control" type="text" placeholder="Description" name="description" value="{{search_terms.descripion}}">
                 <input class="form-control" type="text" placeholder="Year" name="year" value="{{search_terms.year}}">
-                <select class="form-control" name="category">
-                    <option value="">Category</option>
-                </select>
+                <input type="hidden" name="category" value="{{search_terms.category}}">
             </div>
         </form>
 </nav>
