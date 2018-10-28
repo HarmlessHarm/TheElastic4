@@ -29,7 +29,7 @@ def search_question():
 		'timeline': timeline,
 		'wordcloud': wordcloud,
 		'count': count,
-		'range': '{} - {}'.format(str(page * 50 + 1), str(page * 50 + 50))
+		'range': '{} - {}'.format(str(page * 25 + 1), str(page * 25 + 25))
 	}
 	return render_template('index.html', data=data)
 

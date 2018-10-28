@@ -74,12 +74,13 @@ class UserResult(object):
 
 def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	client = Elasticsearch()
+	increment = 25
 
 	client.transport.connection_pool.connection.headers.update(HEADERS)
 
 	s = Search(using=client, index=Q_INDEX, doc_type=Q_DOC_T)
 	query_dict = {
-		'from': page * 50,
+		'from': page * increment,
 		'query': {
 			'bool': {
 				'must': {
@@ -95,7 +96,7 @@ def getQuestions(query:str,page:int) -> List[QuestionResult]:
 	search = s.from_dict(query_dict)
 	count = search.count()
 	strt = int(page)
-	end = int(page) + 50
+	end = int(page) + increment
 	docs = search[strt:end].execute()
 
 	return (count, [QuestionResult.from_doc(d) for d in docs])
